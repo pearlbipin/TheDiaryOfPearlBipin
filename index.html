@@ -20,31 +20,26 @@
 
 <style>
 :root {
-  /* Paper & desk */
   --paper:        #f7efd9;
   --paper-edge:   #e9dcc0;
   --paper-shadow: #d4c5a5;
   --desk-top:     #4a3624;
   --desk-bottom:  #201509;
 
-  /* Ink */
-  --ink:          #1a3a8a;   /* fountain-pen blue */
-  --ink-soft:     #4d5c9c;   /* muted blue for dates */
-  --ink-meta:     #7a6b58;   /* warm brown for page numbers */
-  --ui-ink:       #3a2f24;   /* neutral brown for controls */
+  --ink:          #1a3a8a;
+  --ink-soft:     #4d5c9c;
+  --ink-meta:     #7a6b58;
+  --ui-ink:       #3a2f24;
 
-  /* Furniture */
   --ribbon:       #8b1e3f;
   --margin-line:  rgba(190, 70, 70, 0.16);
   --rule-line:    rgba(100, 130, 180, 0.055);
 
-  /* Type */
   --font-size:    22px;
   --font-hand:    'Caveat', 'Kalam', 'Patrick Hand', cursive, sans-serif;
   --font-serif:   'Lora', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-display: 'Dancing Script', 'Caveat', cursive;
 
-  /* Shadows */
   --shadow-book: 0 30px 70px rgba(0, 0, 0, 0.45),
                  0 10px 24px rgba(0, 0, 0, 0.30),
                  0 2px 6px rgba(0, 0, 0, 0.18);
@@ -53,10 +48,11 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
+@keyframes bodyFadeIn { from { opacity: 0 } to { opacity: 1 } }
+
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% -20%, var(--desk-top) 0%, var(--desk-bottom) 82%);
+  background: radial-gradient(ellipse at 50% -20%, var(--desk-top) 0%, var(--desk-bottom) 82%);
   background-color: var(--desk-bottom);
   color: var(--ink);
   font-family: var(--font-hand);
@@ -65,19 +61,15 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 3rem 1rem 5rem;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  animation: bodyFadeIn 0.5s ease both;
 }
-body.ready { opacity: 1; }
 
 .visually-hidden {
   position: absolute !important;
   width: 1px; height: 1px;
   padding: 0; margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
 }
 
 /* ---------- Masthead ---------- */
@@ -93,8 +85,7 @@ body.ready { opacity: 1; }
   line-height: 1.1;
   margin: 0 0 0.4rem;
   color: var(--paper);
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35),
-               0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.01em;
 }
 .ornament {
@@ -133,11 +124,7 @@ body.ready { opacity: 1; }
   from { opacity: 0; transform: translateX(-10px) scale(0.998); }
   to   { opacity: 1; transform: translateX(0)    scale(1); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .book.flipping-next, .book.flipping-prev { animation: none; }
-}
 
-/* Spine shadow */
 .book::before {
   content: '';
   position: absolute;
@@ -152,7 +139,6 @@ body.ready { opacity: 1; }
   z-index: 2;
 }
 
-/* Ribbon bookmark at the spine */
 .book::after {
   content: '';
   position: absolute;
@@ -171,6 +157,61 @@ body.ready { opacity: 1; }
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
+/* ---------- Loading / error overlay ---------- */
+.book-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 12, 5, 0.72);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 20;
+  color: var(--paper);
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 3px;
+  line-height: 1.5;
+}
+.book-status[hidden] { display: none; }
+.book-status.error {
+  background: rgba(80, 20, 25, 0.92);
+  align-items: flex-start;
+  overflow: auto;
+}
+.book-status.error .error-inner {
+  max-width: 600px;
+  text-align: left;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.book-status.error h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin: 0 0 0.8rem;
+  color: #ffd9c0;
+}
+.book-status.error code {
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: 0.9rem;
+  background: rgba(0,0,0,0.35);
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0.2rem 0;
+  word-break: break-all;
+}
+.book-status.error .hint {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
 /* ---------- Pages ---------- */
 .page {
   padding: 3.4rem 3.1rem 4.4rem;
@@ -179,13 +220,9 @@ body.ready { opacity: 1; }
   flex-direction: column;
   background-color: var(--paper);
   background-image:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 37px,
-      var(--rule-line) 37px,
-      var(--rule-line) 38px
-    ),
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent 37px,
+      var(--rule-line) 37px, var(--rule-line) 38px),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
@@ -193,36 +230,25 @@ body.ready { opacity: 1; }
 .page-left {
   background-image:
     linear-gradient(to right, rgba(60, 40, 20, 0.035), rgba(60, 40, 20, 0) 26%),
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 37px,
-      var(--rule-line) 37px,
-      var(--rule-line) 38px
-    ),
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent 37px,
+      var(--rule-line) 37px, var(--rule-line) 38px),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   border-right: 1px solid var(--paper-edge);
 }
 .page-right {
   background-image:
     linear-gradient(to left, rgba(60, 40, 20, 0.035), rgba(60, 40, 20, 0) 26%),
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 37px,
-      var(--rule-line) 37px,
-      var(--rule-line) 38px
-    ),
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent 37px,
+      var(--rule-line) 37px, var(--rule-line) 38px),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Red margin lines, outer edges (classic notebook) */
-.page-left::before,
-.page-right::before {
+.page-left::before, .page-right::before {
   content: '';
   position: absolute;
-  top: 2.2rem;
-  bottom: 2.2rem;
+  top: 2.2rem; bottom: 2.2rem;
   width: 1px;
   background: var(--margin-line);
   pointer-events: none;
@@ -230,28 +256,21 @@ body.ready { opacity: 1; }
 .page-left::before  { left:  2rem; }
 .page-right::before { right: 2rem; }
 
-/* Page curl (subtle lift at outer bottom corners) */
-.page-left::after,
-.page-right::after {
+.page-left::after, .page-right::after {
   content: '';
   position: absolute;
   bottom: 0;
-  width: 46px;
-  height: 46px;
+  width: 46px; height: 46px;
   pointer-events: none;
   z-index: 1;
 }
 .page-left::after {
   left: 0;
-  background: linear-gradient(45deg,
-    transparent 50%,
-    rgba(140, 125, 100, 0.14) 50%);
+  background: linear-gradient(45deg, transparent 50%, rgba(140, 125, 100, 0.14) 50%);
 }
 .page-right::after {
   right: 0;
-  background: linear-gradient(225deg,
-    transparent 50%,
-    rgba(140, 125, 100, 0.14) 50%);
+  background: linear-gradient(225deg, transparent 50%, rgba(140, 125, 100, 0.14) 50%);
 }
 
 .page-empty {
@@ -290,11 +309,9 @@ body.ready { opacity: 1; }
   flex: 1;
   word-break: break-word;
   overflow-wrap: anywhere;
-  text-shadow: 0 0 0.4px currentColor; /* subtle ink weight */
+  text-shadow: 0 0 0.4px currentColor;
 }
-.entry-body p {
-  margin: 0 0 1em;
-}
+.entry-body p { margin: 0 0 1em; }
 .entry-body p:last-child { margin-bottom: 0; }
 .entry-body p.search-hit {
   background: rgba(255, 215, 100, 0.45);
@@ -303,7 +320,6 @@ body.ready { opacity: 1; }
   box-shadow: 0 0 0 2px rgba(255, 215, 100, 0.45);
 }
 
-/* Serif mode */
 [data-font="serif"] .entry-body,
 [data-font="serif"] .entry-header {
   font-family: var(--font-serif);
@@ -326,26 +342,6 @@ body.ready { opacity: 1; }
 }
 
 .page-erased .entry-body { display: none; }
-.page-erased::before { /* keep margin line on erased page */ content: ''; }
-
-/* ---------- Loading / error ---------- */
-.book-notice {
-  grid-column: 1 / -1;
-  padding: 5rem 2rem;
-  text-align: center;
-  font-family: var(--font-hand);
-  font-size: 1.2rem;
-  color: var(--ink-soft);
-  font-style: italic;
-}
-.book-notice.error { color: #8b1e3f; font-style: normal; }
-.book-notice.error code {
-  font-family: ui-monospace, monospace;
-  font-size: 0.85rem;
-  background: rgba(0,0,0,0.05);
-  padding: 2px 6px;
-  border-radius: 2px;
-}
 
 /* ---------- Controls ---------- */
 .book-controls {
@@ -361,8 +357,7 @@ body.ready { opacity: 1; }
   background: transparent;
   border: 1px solid rgba(247, 239, 217, 0.35);
   color: var(--paper);
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.5rem; height: 2.5rem;
   border-radius: 50%;
   font-size: 1.15rem;
   cursor: pointer;
@@ -375,9 +370,7 @@ body.ready { opacity: 1; }
   line-height: 1;
 }
 .icon-btn:hover:not(:disabled) {
-  background: var(--paper);
-  color: var(--ui-ink);
-  border-color: var(--paper);
+  background: var(--paper); color: var(--ui-ink); border-color: var(--paper);
   transform: translateY(-1px);
 }
 .icon-btn:disabled { opacity: 0.22; cursor: default; }
@@ -391,161 +384,98 @@ body.ready { opacity: 1; }
   letter-spacing: 0.03em;
 }
 
-/* ---------- Scrubber ---------- */
 .scrubber-wrap {
   max-width: 540px;
   margin: 1rem auto 0;
   padding: 0 0.5rem;
 }
 .scrubber {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 3px;
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 3px;
   background: rgba(247, 239, 217, 0.20);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
+  border-radius: 2px; outline: none; cursor: pointer;
 }
 .scrubber::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--ui-ink);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-  cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--ui-ink);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4); cursor: pointer;
 }
 .scrubber::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--ui-ink);
-  cursor: pointer;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--ui-ink); cursor: pointer;
 }
 
-/* ---------- Tools ---------- */
 .book-tools {
-  display: flex;
-  justify-content: center;
-  gap: 0.7rem;
+  display: flex; justify-content: center; gap: 0.7rem;
   margin-top: 1.3rem;
 }
 .tool-btn {
-  background: transparent;
-  border: none;
+  background: transparent; border: none;
   color: rgba(247, 239, 217, 0.55);
-  font-family: var(--font-hand);
-  font-size: 1.15rem;
-  padding: 0.4rem 0.7rem;
-  cursor: pointer;
+  font-family: var(--font-hand); font-size: 1.15rem;
+  padding: 0.4rem 0.7rem; cursor: pointer;
   border-radius: 3px;
   transition: color 0.15s, background 0.15s;
   line-height: 1;
 }
-.tool-btn:hover {
-  color: var(--paper);
-  background: rgba(247, 239, 217, 0.08);
-}
+.tool-btn:hover { color: var(--paper); background: rgba(247, 239, 217, 0.08); }
 
-/* ---------- Search overlay ---------- */
+/* ---------- Search ---------- */
 .search-overlay {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: rgba(20, 12, 5, 0.42);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 12vh;
-  z-index: 40;
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 12vh; z-index: 40;
 }
 .search-overlay[hidden] { display: none; }
-
 .search-box {
-  background: var(--paper);
-  border-radius: 3px;
+  background: var(--paper); border-radius: 3px;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
   padding: 1.3rem 1.5rem;
   width: min(540px, 92vw);
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+  display: flex; flex-direction: column; gap: 0.7rem;
   font-family: var(--font-hand);
 }
 .search-box input {
-  width: 100%;
-  border: none;
+  width: 100%; border: none;
   border-bottom: 1px solid var(--paper-shadow);
   background: transparent;
-  font-family: var(--font-hand);
-  font-size: 1.35rem;
-  padding: 0.5rem 0;
-  color: var(--ink);
-  outline: none;
+  font-family: var(--font-hand); font-size: 1.35rem;
+  padding: 0.5rem 0; color: var(--ink); outline: none;
 }
-.search-box input::placeholder {
-  color: var(--ink-soft);
-  opacity: 0.55;
-}
-.search-status {
-  font-size: 0.95rem;
-  color: var(--ink-soft);
-  min-height: 1.2em;
-}
+.search-box input::placeholder { color: var(--ink-soft); opacity: 0.55; }
+.search-status { font-size: 0.95rem; color: var(--ink-soft); min-height: 1.2em; }
 
 /* ---------- Font popover ---------- */
 .font-popover {
-  position: fixed;
-  bottom: 2.2rem;
-  right: 1.8rem;
-  background: var(--paper);
-  border-radius: 4px;
+  position: fixed; bottom: 2.2rem; right: 1.8rem;
+  background: var(--paper); border-radius: 4px;
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
   padding: 1rem 1.1rem;
-  font-family: var(--font-hand);
-  font-size: 1rem;
+  font-family: var(--font-hand); font-size: 1rem;
   z-index: 30;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  min-width: 210px;
-  color: var(--ui-ink);
+  display: flex; flex-direction: column; gap: 0.7rem;
+  min-width: 210px; color: var(--ui-ink);
 }
 .font-popover[hidden] { display: none; }
-
 .font-controls { display: flex; gap: 0.4rem; }
 .font-controls button {
-  flex: 1;
-  background: transparent;
+  flex: 1; background: transparent;
   border: 1px solid rgba(58, 47, 36, 0.3);
   color: var(--ui-ink);
-  padding: 0.4rem 0.5rem;
-  border-radius: 2px;
-  font-family: var(--font-hand);
-  font-size: 1.05rem;
-  cursor: pointer;
+  padding: 0.4rem 0.5rem; border-radius: 2px;
+  font-family: var(--font-hand); font-size: 1.05rem; cursor: pointer;
 }
 .font-controls button:hover { background: var(--ui-ink); color: var(--paper); }
-
 .font-style-toggle {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding-top: 0.55rem;
-  border-top: 1px dashed var(--paper-shadow);
+  display: flex; flex-direction: column; gap: 0.3rem;
+  padding-top: 0.55rem; border-top: 1px dashed var(--paper-shadow);
 }
 .font-style-toggle label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  cursor: pointer;
-  font-size: 1rem;
-  color: var(--ui-ink);
+  display: flex; align-items: center; gap: 0.4rem;
+  cursor: pointer; font-size: 1rem; color: var(--ui-ink);
 }
 
 /* ---------- Mobile ---------- */
@@ -554,8 +484,7 @@ body.ready { opacity: 1; }
   .masthead { margin-bottom: 1.6rem; }
   .masthead h1 { font-size: 2.15rem; }
   .book { grid-template-columns: 1fr; min-height: 64vh; }
-  .book::before,
-  .book::after { display: none; }
+  .book::before, .book::after { display: none; }
   .page-left { border-right: none; }
   .page-right { display: none; }
   .page { padding: 2.1rem 1.6rem 3.2rem; min-height: 64vh; }
@@ -566,7 +495,8 @@ body.ready { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body { transition: none; }
+  body { animation: none; }
+  .book.flipping-next, .book.flipping-prev { animation: none; }
 }
 </style>
 </head>
@@ -582,6 +512,7 @@ body.ready { opacity: 1; }
     <div class="page page-left" id="page-left"></div>
     <div class="page page-right" id="page-right"></div>
   </div>
+  <div class="book-status" id="book-status">opening the book…</div>
 
   <nav class="book-controls" aria-label="Page navigation">
     <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">&larr;</button>
@@ -590,8 +521,7 @@ body.ready { opacity: 1; }
   </nav>
 
   <div class="scrubber-wrap">
-    <input type="range" id="scrubber" class="scrubber" min="1" max="1" value="1"
-           aria-label="Jump to page">
+    <input type="range" id="scrubber" class="scrubber" min="1" max="1" value="1" aria-label="Jump to page">
   </div>
 
   <div class="book-tools" role="toolbar" aria-label="Tools">
@@ -623,6 +553,12 @@ body.ready { opacity: 1; }
 (function () {
   'use strict';
 
+  /* Safe storage — never throws, even when localStorage is blocked */
+  var storage = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+  };
+
   /* ---------- Utilities ---------- */
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -641,19 +577,15 @@ body.ready { opacity: 1; }
     var out = [];
     for (var i = 0; i < raw.length; i++) {
       var para = raw[i];
-      if (para.length <= 520) {
-        out.push(para);
-      } else {
+      if (para.length <= 520) { out.push(para); }
+      else {
         var sentences = para.split(/(?<=[.!?])\s+/);
         var buffer = '';
         for (var j = 0; j < sentences.length; j++) {
           var s = sentences[j];
           if (buffer && (buffer + ' ' + s).length > 380) {
-            out.push(buffer.trim());
-            buffer = s;
-          } else {
-            buffer = buffer ? buffer + ' ' + s : s;
-          }
+            out.push(buffer.trim()); buffer = s;
+          } else { buffer = buffer ? buffer + ' ' + s : s; }
         }
         if (buffer.trim()) out.push(buffer.trim());
       }
@@ -664,19 +596,12 @@ body.ready { opacity: 1; }
   function paginateEntry(entry) {
     var paras = splitIntoParagraphs(entry.content);
     if (!paras.length) paras = [''];
-    var chunks = [];
-    var cur = [];
-    var chars = 0;
+    var chunks = [], cur = [], chars = 0;
     for (var i = 0; i < paras.length; i++) {
       var p = paras[i];
-      var wouldExceed = cur.length >= 3 || (chars + p.length > 720 && cur.length > 0);
-      if (wouldExceed) {
-        chunks.push(cur);
-        cur = [];
-        chars = 0;
-      }
-      cur.push(p);
-      chars += p.length;
+      var exceed = cur.length >= 3 || (chars + p.length > 720 && cur.length > 0);
+      if (exceed) { chunks.push(cur); cur = []; chars = 0; }
+      cur.push(p); chars += p.length;
     }
     if (cur.length) chunks.push(cur);
     return chunks;
@@ -689,23 +614,13 @@ body.ready { opacity: 1; }
       if (entry.erased) {
         var n = entry._pageCount || 1;
         for (var k = 0; k < n; k++) {
-          pages.push({
-            entry: entry,
-            blank: true,
-            pageNumber: pages.length + 1,
-            isStart: k === 0
-          });
+          pages.push({ entry: entry, blank: true, pageNumber: pages.length + 1, isStart: k === 0 });
         }
         continue;
       }
       var chunks = paginateEntry(entry);
       for (var c = 0; c < chunks.length; c++) {
-        pages.push({
-          entry: entry,
-          paragraphs: chunks[c],
-          pageNumber: pages.length + 1,
-          isStart: c === 0
-        });
+        pages.push({ entry: entry, paragraphs: chunks[c], pageNumber: pages.length + 1, isStart: c === 0 });
       }
     }
     return pages;
@@ -713,6 +628,7 @@ body.ready { opacity: 1; }
 
   /* ---------- Refs ---------- */
   var book      = document.getElementById('book');
+  var bookStatus = document.getElementById('book-status');
   var pageLeft  = document.getElementById('page-left');
   var pageRight = document.getElementById('page-right');
   var counter   = document.getElementById('page-counter');
@@ -723,10 +639,29 @@ body.ready { opacity: 1; }
   var mqSpread = window.matchMedia('(min-width: 801px)');
   var isSpread = mqSpread.matches;
 
-  /* ---------- State ---------- */
   var entries = [];
   var pages   = [];
   var cursor  = 0;
+
+  /* ---------- Status overlay ---------- */
+  function showLoading() {
+    bookStatus.hidden = false;
+    bookStatus.className = 'book-status';
+    bookStatus.textContent = 'opening the book…';
+  }
+  function hideStatus() {
+    bookStatus.hidden = true;
+  }
+  function showError(title, detail, hint) {
+    bookStatus.hidden = false;
+    bookStatus.className = 'book-status error';
+    bookStatus.innerHTML =
+      '<div class="error-inner">' +
+        '<h2>' + esc(title) + '</h2>' +
+        '<p>' + detail + '</p>' +
+        (hint ? '<p class="hint">' + hint + '</p>' : '') +
+      '</div>';
+  }
 
   /* ---------- Render ---------- */
   function renderPage(el, page) {
@@ -742,8 +677,7 @@ body.ready { opacity: 1; }
 
     if (page.blank) {
       el.classList.add('page-erased');
-      el.innerHTML =
-        '<div class="page-footer" aria-hidden="true">' + page.pageNumber + '</div>';
+      el.innerHTML = '<div class="page-footer" aria-hidden="true">' + page.pageNumber + '</div>';
       return;
     }
 
@@ -793,35 +727,28 @@ body.ready { opacity: 1; }
 
   function render() {
     snapCursor();
-
     if (isSpread) {
-      renderPage(pageLeft,  pages[cursor]);
+      renderPage(pageLeft, pages[cursor]);
       renderPage(pageRight, pages[cursor + 1]);
       var start = cursor + 1;
-      var end   = Math.min(cursor + 2, pages.length);
+      var end = Math.min(cursor + 2, pages.length);
       counter.textContent = pages.length
-        ? (start === end ? 'Page ' + end : 'Pages ' + start + '\u2013' + end) +
-          ' of ' + pages.length
+        ? (start === end ? 'Page ' + end : 'Pages ' + start + '\u2013' + end) + ' of ' + pages.length
         : 'empty';
     } else {
       renderPage(pageLeft, pages[cursor]);
       pageRight.innerHTML = '';
       pageRight.classList.add('page-empty');
       pageRight.setAttribute('aria-hidden', 'true');
-      counter.textContent = pages.length
-        ? 'Page ' + (cursor + 1) + ' of ' + pages.length
-        : 'empty';
+      counter.textContent = pages.length ? 'Page ' + (cursor + 1) + ' of ' + pages.length : 'empty';
     }
-
     prevBtn.disabled = cursor <= 0;
     nextBtn.disabled = pages.length === 0 || cursor >= maxCursor();
-
-    scrubber.min   = 1;
-    scrubber.max   = Math.max(1, pages.length);
+    scrubber.min = 1;
+    scrubber.max = Math.max(1, pages.length);
     scrubber.value = pages.length ? cursor + 1 : 1;
     scrubber.disabled = pages.length <= 1;
-
-    try { localStorage.setItem('diary:page', String(cursor)); } catch (e) {}
+    storage.set('diary:page', String(cursor));
   }
 
   function flip(dir) {
@@ -833,26 +760,23 @@ body.ready { opacity: 1; }
 
   function next() { if (!nextBtn.disabled) { cursor += isSpread ? 2 : 1; flip('next'); } }
   function prev() { if (!prevBtn.disabled) { cursor -= isSpread ? 2 : 1; flip('prev'); } }
-
   function gotoPage(idx, dir) {
     cursor = isSpread ? idx - (idx % 2) : idx;
     flip(dir || 'next');
   }
-
   function randomPage() {
     var valid = [];
     for (var i = 0; i < pages.length; i++) if (!pages[i].blank) valid.push(i);
     if (!valid.length) return;
-    var target = valid[Math.floor(Math.random() * valid.length)];
-    gotoPage(target, 'next');
+    gotoPage(valid[Math.floor(Math.random() * valid.length)], 'next');
   }
 
-  /* ---------- Font controls ---------- */
+  /* ---------- Fonts ---------- */
   var fontBtn = document.getElementById('font-btn');
   var fontPopover = document.getElementById('font-popover');
   var root = document.documentElement;
-  var currentSize = parseFloat(localStorage.getItem('diary:fontSize')) || 22;
-  var currentStyle = localStorage.getItem('diary:fontStyle') || 'handwriting';
+  var currentSize = parseFloat(storage.get('diary:fontSize')) || 22;
+  var currentStyle = storage.get('diary:fontStyle') || 'handwriting';
 
   applyFontSize(currentSize);
   applyFontStyle(currentStyle);
@@ -861,15 +785,16 @@ body.ready { opacity: 1; }
     px = Math.max(16, Math.min(30, px));
     currentSize = px;
     root.style.setProperty('--font-size', px + 'px');
-    try { localStorage.setItem('diary:fontSize', String(px)); } catch (e) {}
+    storage.set('diary:fontSize', String(px));
   }
   function applyFontStyle(style) {
     currentStyle = style;
     if (style === 'serif') root.setAttribute('data-font', 'serif');
     else root.removeAttribute('data-font');
-    var radios = document.querySelectorAll('input[name="font-style"]');
-    radios.forEach(function (r) { r.checked = (r.value === style); });
-    try { localStorage.setItem('diary:fontStyle', style); } catch (e) {}
+    document.querySelectorAll('input[name="font-style"]').forEach(function (r) {
+      r.checked = (r.value === style);
+    });
+    storage.set('diary:fontStyle', style);
   }
 
   fontBtn.addEventListener('click', function (ev) {
@@ -882,9 +807,7 @@ body.ready { opacity: 1; }
     r.addEventListener('change', function () { if (r.checked) applyFontStyle(r.value); });
   });
   document.addEventListener('click', function (ev) {
-    if (!fontPopover.hidden &&
-        !fontPopover.contains(ev.target) &&
-        ev.target !== fontBtn) {
+    if (!fontPopover.hidden && !fontPopover.contains(ev.target) && ev.target !== fontBtn) {
       fontPopover.hidden = true;
     }
   });
@@ -899,7 +822,7 @@ body.ready { opacity: 1; }
     searchOverlay.hidden = false;
     searchInput.value = '';
     searchStatus.textContent = '';
-    setTimeout(function () { searchInput.focus(); }, 30);
+    setTimeout(function () { try { searchInput.focus(); } catch (e) {} }, 30);
   }
   function closeSearch() { searchOverlay.hidden = true; }
 
@@ -914,16 +837,11 @@ body.ready { opacity: 1; }
       var q = searchInput.value.trim();
       if (!q) return;
       var idx = findPageContaining(q);
-      if (idx === -1) {
-        searchStatus.textContent = 'No match found.';
-        return;
-      }
+      if (idx === -1) { searchStatus.textContent = 'No match found.'; return; }
       closeSearch();
       gotoPage(idx, idx >= cursor ? 'next' : 'prev');
       setTimeout(function () { highlightMatches(q); }, 60);
-    } else if (ev.key === 'Escape') {
-      closeSearch();
-    }
+    } else if (ev.key === 'Escape') { closeSearch(); }
   });
 
   function findPageContaining(q) {
@@ -937,7 +855,6 @@ body.ready { opacity: 1; }
     }
     return -1;
   }
-
   function highlightMatches(q) {
     var needle = q.toLowerCase();
     document.querySelectorAll('.entry-body p').forEach(function (el) {
@@ -952,7 +869,6 @@ body.ready { opacity: 1; }
   document.addEventListener('keydown', function (ev) {
     var t = ev.target;
     if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
-
     if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown' || ev.key === 'PageDown' || ev.key === ' ') {
       ev.preventDefault(); next();
     } else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp' || ev.key === 'PageUp') {
@@ -978,11 +894,7 @@ body.ready { opacity: 1; }
   });
 
   /* ---------- Responsive ---------- */
-  mqSpread.addEventListener('change', function (ev) {
-    isSpread = ev.matches;
-    render();
-  });
-
+  mqSpread.addEventListener('change', function (ev) { isSpread = ev.matches; render(); });
   book.addEventListener('animationend', function (ev) {
     if (ev.target && ev.target.classList && ev.target.classList.contains('page')) {
       book.classList.remove('flipping-next', 'flipping-prev');
@@ -996,8 +908,7 @@ body.ready { opacity: 1; }
     var id = hash.slice('#entry-'.length);
     for (var i = 0; i < pages.length; i++) {
       if (pages[i].entry && String(pages[i].entry.id) === id && pages[i].isStart) {
-        gotoPage(i, 'next');
-        return;
+        gotoPage(i, 'next'); return;
       }
     }
   }
@@ -1021,36 +932,18 @@ body.ready { opacity: 1; }
         }
       });
     }
-    var ld = {
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'ItemList',
       name: 'The Diary Of Pearl Bipin — entries',
       itemListElement: items
-    };
-    var s = document.createElement('script');
-    s.type = 'application/ld+json';
-    s.textContent = JSON.stringify(ld);
+    });
     document.head.appendChild(s);
   }
 
   /* ---------- Boot ---------- */
-  function showLoading() {
-    book.innerHTML =
-      '<div class="book-notice">opening the book…</div>';
-  }
-
-  function showError(err) {
-    book.innerHTML =
-      '<div class="book-notice error">' +
-        'The book could not be opened.<br>' +
-        '<code>' + esc(err && err.message ? err.message : String(err)) + '</code>' +
-        '<br><br>' +
-        'If you opened this file directly from disk (file://), ' +
-        'try the live site instead.' +
-      '</div>';
-    document.body.classList.add('ready');
-  }
-
   function boot(data) {
     entries = (data.entries || []).slice().sort(function (a, b) {
       var da = new Date(a.date).getTime();
@@ -1060,37 +953,45 @@ body.ready { opacity: 1; }
     });
     pages = paginate(entries);
 
-    // restore resume bookmark
-    try {
-      var saved = parseInt(localStorage.getItem('diary:page'), 10);
-      if (!isNaN(saved) && saved > 0 && saved < pages.length) cursor = saved;
-    } catch (e) {}
+    var saved = parseInt(storage.get('diary:page'), 10);
+    if (!isNaN(saved) && saved > 0 && saved < pages.length) cursor = saved;
 
     injectJsonLd();
     render();
+    hideStatus();
     jumpToHash();
-    document.body.classList.add('ready');
   }
 
   async function load() {
     showLoading();
+    var url = 'data/entries.json';
     try {
-      var res = await fetch('/data/entries.json', { cache: 'no-cache' });
-      if (!res.ok) throw new Error('HTTP ' + res.status + ' while loading entries');
+      var res = await fetch(url, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       var data = await res.json();
+      if (!data || !Array.isArray(data.entries)) throw new Error('entries.json has no "entries" array');
       boot(data);
     } catch (err) {
-      showError(err);
+      var msg = (err && err.message) ? err.message : String(err);
+      showError(
+        'The book could not be opened.',
+        'Tried to fetch <code>' + esc(url) + '</code> and got: <code>' + esc(msg) + '</code>',
+        'If you opened this file directly from disk (file://), the browser ' +
+        'blocks loading local files. Either run a tiny local server in the ' +
+        'repo folder:<br><code>python3 -m http.server 8000</code><br>' +
+        'then visit <code>http://localhost:8000</code>, ' +
+        'or open the live site at <code>thediaryofpearlbipin.vercel.app</code> ' +
+        'once it\'s deployed.'
+      );
     }
   }
 
-  // Reset grid so the notice spans full width while loading
-  var style = document.createElement('style');
-  style.textContent = '.book > .book-notice { grid-column: 1 / -1; }';
-  document.head.appendChild(style);
-
-  document.addEventListener('DOMContentLoaded', load);
-  if (document.readyState !== 'loading') load();
+  /* ---------- Start ---------- */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', load);
+  } else {
+    load();
+  }
 })();
 </script>
 </body>
