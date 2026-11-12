@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The Diary Of Pearl Bipin</title>
 <meta name="description" content="The personal diary of Pearl Bipin Pulickal. An open book you can read, page by page.">
 <meta name="author" content="Pearl Bipin Pulickal">
@@ -51,8 +51,10 @@ html, body { margin: 0; padding: 0; }
 
 @keyframes bodyFadeIn { from { opacity: 0 } to { opacity: 1 } }
 
+/* LAYOUT FIX: Using grid to perfectly fit the screen without scrolling */
 body {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   background: radial-gradient(ellipse at 50% -20%, var(--desk-top) 0%, var(--desk-bottom) 82%);
   background-color: var(--desk-bottom);
   color: var(--ink);
@@ -60,31 +62,21 @@ body {
   -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Centers the whole book on the screen */
-  padding: 2rem 1rem;
+  overflow: hidden; /* Absolutely no scrolling */
   animation: bodyFadeIn 0.5s ease both;
 }
 
-.visually-hidden {
-  position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0, 0, 0, 0);
-  white-space: nowrap; border: 0;
-}
-
-/* ---------- Masthead ---------- */
+/* Masthead (Header) */
 .masthead {
   text-align: center;
-  margin-bottom: 1.5rem;
-  max-width: 680px;
+  padding: 1.5rem 1rem 0.5rem;
+  flex-shrink: 0;
 }
 .masthead h1 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 2.8rem;
-  line-height: 1.1;
+  line-height: 1;
   margin: 0 0 0.2rem;
   color: var(--paper);
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -92,18 +84,27 @@ body {
 }
 .ornament {
   font-family: var(--font-hand);
-  font-size: 1rem;
+  font-size: 0.9rem;
   letter-spacing: 0.5em;
   color: rgba(247, 239, 217, 0.55);
   user-select: none;
 }
 
-/* ---------- Book ---------- */
+/* Main Book Area (Grows to fill remaining space) */
+main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  perspective: 4000px;
+}
+
 .book-frame {
   width: 100%;
   max-width: 1000px;
-  position: relative;
-  perspective: 4000px; 
+  height: 100%;
 }
 
 .book {
@@ -113,10 +114,7 @@ body {
   border-radius: 3px;
   box-shadow: var(--shadow-book);
   position: relative;
-  /* THE FIX: Fixed height that never changes based on content */
-  height: 72vh; 
-  max-height: 750px;
-  min-height: 500px;
+  height: 100%; /* Fills the flex container */
   transform-style: preserve-3d;
 }
 
@@ -152,7 +150,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-/* ---------- Loading / error overlay ---------- */
+/* Loading / error overlay */
 .book-status {
   position: absolute;
   inset: 0;
@@ -199,17 +197,10 @@ body {
   margin: 0.2rem 0;
   word-break: break-all;
 }
-.book-status.error .hint {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255,255,255,0.15);
-  font-size: 0.95rem;
-  opacity: 0.9;
-}
 
-/* ---------- Pages ---------- */
+/* Pages */
 .page {
-  padding: 2.2rem 2.5rem 3rem;
+  padding: 2rem 2.5rem 2.5rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -220,7 +211,6 @@ body {
       var(--rule-line) 37px, var(--rule-line) 38px),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  /* THE FIX: Force pages to fill the fixed-height book, preventing overflow */
   height: 100%;
   overflow: hidden; 
 }
@@ -276,7 +266,7 @@ body {
   background-image: none;
 }
 
-/* ---------- Entry typography ---------- */
+/* Entry Typography */
 .entry {
   display: flex;
   flex-direction: column;
@@ -292,8 +282,8 @@ body {
   font-size: 1.05rem;
   letter-spacing: 0.02em;
   color: var(--ink-soft);
-  margin-bottom: 1.65rem;
-  padding-bottom: 0.7rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px dashed var(--paper-shadow);
   flex-shrink: 0;
 }
@@ -310,7 +300,6 @@ body {
   word-break: break-word;
   overflow-wrap: anywhere;
   text-shadow: 0 0 0.4px currentColor;
-  /* Failsafe in case an insanely long word pushes boundaries */
   overflow-y: auto; 
   scrollbar-width: none; 
 }
@@ -348,7 +337,7 @@ body {
 
 .page-erased .entry-body { display: none; }
 
-/* ---------- 3D FLIP ANIMATION ---------- */
+/* 3D FLIP ANIMATION */
 .flip-sheet {
   position: absolute;
   top: 0;
@@ -402,13 +391,21 @@ body {
   100% { box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
 }
 
-/* ---------- Controls ---------- */
+/* Footer Controls Area */
+footer {
+  flex-shrink: 0;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 .book-controls {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1.4rem;
-  margin-top: 1.2rem;
   font-family: var(--font-hand);
 }
 
@@ -444,8 +441,8 @@ body {
 }
 
 .scrubber-wrap {
+  width: 100%;
   max-width: 540px;
-  margin: 0.8rem auto 0;
   padding: 0 0.5rem;
 }
 .scrubber {
@@ -467,20 +464,19 @@ body {
 
 .book-tools {
   display: flex; justify-content: center; gap: 0.7rem;
-  margin-top: 1rem;
 }
 .tool-btn {
   background: transparent; border: none;
   color: rgba(247, 239, 217, 0.55);
   font-family: var(--font-hand); font-size: 1.15rem;
-  padding: 0.4rem 0.7rem; cursor: pointer;
+  padding: 0.2rem 0.6rem; cursor: pointer;
   border-radius: 3px;
   transition: color 0.15s, background 0.15s;
   line-height: 1;
 }
 .tool-btn:hover { color: var(--paper); background: rgba(247, 239, 217, 0.08); }
 
-/* ---------- Search ---------- */
+/* Search Overlay */
 .search-overlay {
   position: fixed; inset: 0;
   background: rgba(20, 12, 5, 0.42);
@@ -507,7 +503,7 @@ body {
 .search-box input::placeholder { color: var(--ink-soft); opacity: 0.55; }
 .search-status { font-size: 0.95rem; color: var(--ink-soft); min-height: 1.2em; }
 
-/* ---------- Font popover ---------- */
+/* Font Popover */
 .font-popover {
   position: fixed; bottom: 2.2rem; right: 1.8rem;
   background: var(--paper); border-radius: 4px;
@@ -537,12 +533,11 @@ body {
   cursor: pointer; font-size: 1rem; color: var(--ui-ink);
 }
 
-/* ---------- Mobile ---------- */
+/* Mobile */
 @media (max-width: 800px) {
-  body { padding: 1.5rem 0.75rem 2rem; justify-content: flex-start; }
-  .masthead { margin-bottom: 1rem; }
+  .masthead { padding-top: 1rem; }
   .masthead h1 { font-size: 2.15rem; }
-  .book { grid-template-columns: 1fr; height: 65vh; min-height: 400px; }
+  .book { grid-template-columns: 1fr; }
   .book::before, .book::after { display: none; }
   .page-left { border-right: none; }
   .page-right { display: none; }
@@ -550,7 +545,7 @@ body {
   .page-left::before, .page-right::before { display: none; }
   .entry-body { font-size: calc(var(--font-size) - 1px); }
   .page-counter { min-width: 8rem; font-size: 0.95rem; }
-  .font-popover { right: 1rem; bottom: 1rem; }
+  .font-popover { right: 1rem; bottom: 4rem; }
   
   /* Mobile fade/slide fallback */
   .book.flipping-next { animation: riffleNextMobile 0.34s ease-out; }
@@ -579,13 +574,17 @@ body {
   <div class="ornament" aria-hidden="true">· · ·</div>
 </header>
 
-<main class="book-frame">
-  <div class="book" id="book" aria-live="polite">
-    <div class="page page-left" id="page-left"></div>
-    <div class="page page-right" id="page-right"></div>
-    <div class="book-status" id="book-status">opening the book…</div>
+<main>
+  <div class="book-frame">
+    <div class="book" id="book" aria-live="polite">
+      <div class="page page-left" id="page-left"></div>
+      <div class="page page-right" id="page-right"></div>
+      <div class="book-status" id="book-status">opening the book…</div>
+    </div>
   </div>
+</main>
 
+<footer>
   <nav class="book-controls" aria-label="Page navigation">
     <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">&larr;</button>
     <span class="page-counter" id="page-counter"></span>
@@ -602,7 +601,7 @@ body {
     <button class="tool-btn" id="font-btn" type="button" title="Text settings">Aa</button>
     <button class="tool-btn" id="write-btn" type="button" title="Write in diary" onclick="window.location.href='/write.html'">&#9998;</button>
   </div>
-</main>
+</footer>
 
 <div class="search-overlay" id="search-overlay" hidden>
   <div class="search-box" role="dialog" aria-label="Search">
