@@ -41,9 +41,9 @@
   --font-serif:   'Lora', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-display: 'Dancing Script', 'Caveat', cursive;
 
-  --shadow-book: 0 30px 70px rgba(0, 0, 0, 0.45),
-                 0 10px 24px rgba(0, 0, 0, 0.30),
-                 0 2px 6px rgba(0, 0, 0, 0.18);
+  --shadow-book: 0 20px 50px rgba(0, 0, 0, 0.45),
+                 0 8px 16px rgba(0, 0, 0, 0.25),
+                 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 * { box-sizing: border-box; }
@@ -61,7 +61,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3rem 1rem 5rem;
+  padding: 1.5rem 1rem 2rem;
   animation: bodyFadeIn 0.5s ease both;
 }
 
@@ -76,15 +76,15 @@ body {
 /* ---------- Masthead ---------- */
 .masthead {
   text-align: center;
-  margin-bottom: 2.2rem;
+  margin-bottom: 1.2rem;
   max-width: 680px;
 }
 .masthead h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 3.1rem;
+  font-size: 2.8rem;
   line-height: 1.1;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.2rem;
   color: var(--paper);
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.01em;
@@ -100,7 +100,7 @@ body {
 /* ---------- Book ---------- */
 .book-frame {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1000px;
   position: relative;
 }
 
@@ -111,7 +111,7 @@ body {
   border-radius: 3px;
   box-shadow: var(--shadow-book);
   position: relative;
-  min-height: 70vh;
+  min-height: 55vh;
 }
 
 .book.flipping-next { animation: riffleNext 0.34s ease-out; }
@@ -130,7 +130,7 @@ body {
   content: '';
   position: absolute;
   inset: 0 50% 0 auto;
-  width: 72px;
+  width: 64px;
   transform: translateX(50%);
   background: linear-gradient(to right,
     rgba(60, 40, 20, 0) 0%,
@@ -215,7 +215,7 @@ body {
 
 /* ---------- Pages ---------- */
 .page {
-  padding: 3.4rem 3.1rem 4.4rem;
+  padding: 2.2rem 2.5rem 3rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -249,19 +249,19 @@ body {
 .page-left::before, .page-right::before {
   content: '';
   position: absolute;
-  top: 2.2rem; bottom: 2.2rem;
+  top: 1.5rem; bottom: 1.5rem;
   width: 1px;
   background: var(--margin-line);
   pointer-events: none;
 }
-.page-left::before  { left:  2rem; }
-.page-right::before { right: 2rem; }
+.page-left::before  { left:  1.6rem; }
+.page-right::before { right: 1.6rem; }
 
 .page-left::after, .page-right::after {
   content: '';
   position: absolute;
   bottom: 0;
-  width: 46px; height: 46px;
+  width: 36px; height: 36px;
   pointer-events: none;
   z-index: 1;
 }
@@ -331,7 +331,7 @@ body {
 
 .page-footer {
   position: absolute;
-  bottom: 1.35rem;
+  bottom: 0.8rem;
   left: 0; right: 0;
   text-align: center;
   font-family: var(--font-hand);
@@ -350,7 +350,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1.4rem;
-  margin-top: 1.9rem;
+  margin-top: 1.2rem;
   font-family: var(--font-hand);
 }
 
@@ -387,7 +387,7 @@ body {
 
 .scrubber-wrap {
   max-width: 540px;
-  margin: 1rem auto 0;
+  margin: 0.8rem auto 0;
   padding: 0 0.5rem;
 }
 .scrubber {
@@ -409,7 +409,7 @@ body {
 
 .book-tools {
   display: flex; justify-content: center; gap: 0.7rem;
-  margin-top: 1.3rem;
+  margin-top: 1rem;
 }
 .tool-btn {
   background: transparent; border: none;
@@ -481,14 +481,14 @@ body {
 
 /* ---------- Mobile ---------- */
 @media (max-width: 800px) {
-  body { padding: 2rem 0.75rem 4rem; }
-  .masthead { margin-bottom: 1.6rem; }
+  body { padding: 1.5rem 0.75rem 2rem; }
+  .masthead { margin-bottom: 1rem; }
   .masthead h1 { font-size: 2.15rem; }
-  .book { grid-template-columns: 1fr; min-height: 64vh; }
+  .book { grid-template-columns: 1fr; min-height: 60vh; }
   .book::before, .book::after { display: none; }
   .page-left { border-right: none; }
   .page-right { display: none; }
-  .page { padding: 2.1rem 1.6rem 3.2rem; min-height: 64vh; }
+  .page { padding: 1.5rem 1.6rem 2.5rem; min-height: 60vh; }
   .page-left::before, .page-right::before { display: none; }
   .entry-body { font-size: calc(var(--font-size) - 1px); }
   .page-counter { min-width: 8rem; font-size: 0.95rem; }
@@ -509,11 +509,12 @@ body {
 </header>
 
 <main class="book-frame">
+  <!-- MOVED book-status INSIDE the book, so it can never block the controls -->
   <div class="book" id="book" aria-live="polite">
     <div class="page page-left" id="page-left"></div>
     <div class="page page-right" id="page-right"></div>
+    <div class="book-status" id="book-status">opening the book…</div>
   </div>
-  <div class="book-status" id="book-status">opening the book…</div>
 
   <nav class="book-controls" aria-label="Page navigation">
     <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">&larr;</button>
@@ -861,6 +862,14 @@ body {
       }
     });
   }
+
+  // FIXED: Restored the scrubber listener
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  scrubber.addEventListener('input', function () {
+    gotoPage(parseInt(scrubber.value, 10) - 1, 'next');
+  });
+  document.getElementById('random-btn').addEventListener('click', randomPage);
 
   document.addEventListener('keydown', function (ev) {
     var t = ev.target;
