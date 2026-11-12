@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entry — The Diary Of Pearl Bipin</title>
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f7efd9;
+  --paper-edge: #e9dcc0;
+  --ink: #1a3a8a;
+  --ink-soft: #4d5c9c;
+  --ui-ink: #3a2f24;
+  --ink-meta: #7a6b58;
+  --desk-top: #4a3624;
+  --desk-bottom: #201509;
+  --margin-line: rgba(190, 70, 70, 0.16);
+  --rule-line: rgba(100, 130, 180, 0.055);
+  --font-hand: 'Caveat', cursive, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  --font-display: 'Dancing Script', cursive;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% -20%, var(--desk-top) 0%, var(--desk-bottom) 82%);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  -webkit-font-smoothing: antialiased;
+  padding: 2.5rem 1rem 4rem;
+  display: flex; flex-direction: column; align-items: center;
+}
+.wrap { width: 100%; max-width: 760px; }
+.header { text-align: center; margin-bottom: 1.5rem; }
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 2rem; margin: 0 0 0.3rem;
+  color: var(--paper);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+.header a { color: rgba(247,239,217,0.75); text-decoration: none; font-size: 1rem; }
+.header a:hover { color: var(--paper); text-decoration: underline; }
+.page {
+  background: var(--paper);
+  border-radius: 3px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.42), 0 4px 12px rgba(0,0,0,0.2);
+  padding: 3.2rem 3.5rem 3.8rem;
+  position: relative;
+  min-height: 60vh;
+  background-image:
+    repeating-linear-gradient(to bottom, transparent 0, transparent 37px, var(--rule-line) 37px, var(--rule-line) 38px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.page::before {
+  content: ''; position: absolute;
+  top: 2.2rem; bottom: 2.2rem; left: 2rem;
+  width: 1px; background: var(--margin-line);
+}
+.entry-header {
+  font-family: var(--font-hand); font-weight: 600; font-size: 1.05rem;
+  color: var(--ink-soft); margin-bottom: 1.8rem; padding-bottom: 0.7rem;
+  border-bottom: 1px dashed var(--paper-edge);
+}
+.entry-header time { font-style: italic; }
+.entry-body {
+  font-family: var(--font-hand); font-weight: 500;
+  font-size: 22px; line-height: 1.7; color: var(--ink);
+  text-shadow: 0 0 0.4px currentColor;
+}
+.entry-body p { margin: 0 0 1em; }
+.entry-body p:last-child { margin-bottom: 0; }
+
+.notice { text-align: center; color: var(--ink-soft); font-size: 1.15rem; font-style: italic; padding: 3rem 1rem; }
+.notice.erased { color: var(--ink-meta); opacity: 0.7; }
+
+.entry-nav {
+  display: flex; justify-content: space-between; gap: 1rem;
+  margin-top: 1.8rem;
+}
+.entry-nav a {
+  color: rgba(247,239,217,0.85);
+  font-family: var(--font-hand); font-size: 1.05rem;
+  text-decoration: underline; text-underline-offset: 3px;
+  max-width: 48%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.entry-nav a:hover { color: var(--paper); }
+.entry-nav a.next { margin-left: auto; text-align: right; }
+
+@media (max-width: 700px) {
+  body { padding: 1.5rem 0.75rem 3rem; }
+  .header h1 { font-size: 1.5rem; }
+  .page { padding: 2rem 1.5rem 2.5rem; }
+  .page::before { left: 1rem; }
+  .entry-body { font-size: 19px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1><a href="/">The Diary Of Pearl Bipin</a></h1>
+  </div>
+  <div class="page" id="page">
+    <div class="notice">Loading entry…</div>
+  </div>
+  <div class="entry-nav" id="entry-nav"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Config ----------
+  var SITE_URL  = 'https://thediaryofpearlbipin.vercel.app';
+  var AUTHOR    = 'Pearl Bipin Pulickal';
+  var SITE_NAME = 'The Diary Of Pearl Bipin';
+
+  // ---------- ID from URL ----------
+  function getEntryId() {
+    var m = window.location.pathname.match(/^\/entry\/([^\/]+)\/?$/);
+    if (m) return decodeURIComponent(m[1]);
+    var params = new URLSearchParams(window.location.search);
+    return params.get('id');
+  }
+
+  var id = getEntryId();
+  var page = document.getElementById('page');
+  var nav  = document.getElementById('entry-nav');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+  function isoDate(d) { return new Date(d).toISOString().slice(0, 10); }
+  function humanDate(d) {
+    return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  function firstLine(text, max) {
+    var p = String(text).split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean)[0] || '';
+    p = p.replace(/\s+/g, ' ').trim();
+    return p.length > max ? p.slice(0, max - 1).trimEnd() + '…' : p;
+  }
+
+  function setMeta(attrs) {
+    Object.keys(attrs).forEach(function (name) {
+      var content = attrs[name];
+      var m = document.querySelector('meta[name="' + name + '"]');
+      if (!m) { m = document.createElement('meta'); m.name = name; document.head.appendChild(m); }
+      m.content = content;
+    });
+  }
+  function setOG(attrs) {
+    Object.keys(attrs).forEach(function (prop) {
+      var m = document.querySelector('meta[property="' + prop + '"]');
+      if (!m) { m = document.createElement('meta'); m.setAttribute('property', prop); document.head.appendChild(m); }
+      m.content = attrs[prop];
+    });
+  }
+  function setCanonical(url) {
+    var l = document.querySelector('link[rel="canonical"]');
+    if (!l) { l = document.createElement('link'); l.rel = 'canonical'; document.head.appendChild(l); }
+    l.href = url;
+  }
+
+  function showError(msg) {
+    page.innerHTML = '<div class="notice">' + esc(msg) + '</div>';
+    document.title = 'Entry not found — ' + SITE_NAME;
+    setMeta({ robots: 'noindex' });
+  }
+
+  function renderEntry(entry, prevEntry, nextEntry) {
+    var canonical = SITE_URL + '/entry/' + entry.id;
+    setCanonical(canonical);
+
+    var title = firstLine(entry.content, 70) || 'Entry ' + entry.id;
+    var desc  = firstLine(entry.content, 160) || 'An entry in the diary of Pearl Bipin.';
+
+    document.title = title + ' — ' + SITE_NAME;
+    setMeta({
+      description: desc,
+      author: AUTHOR,
+      robots: 'index, follow, max-snippet:-1'
+    });
+    setOG({
+      'og:type': 'article',
+      'og:title': title,
+      'og:description': desc,
+      'og:url': canonical,
+      'article:published_time': entry.date,
+      'article:author': AUTHOR
+    });
+
+    var jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      '@id': canonical,
+      headline: title,
+      description: desc,
+      datePublished: entry.date,
+      dateModified: entry.date,
+      author: { '@type': 'Person', name: AUTHOR },
+      publisher: { '@type': 'Person', name: AUTHOR },
+      mainEntityOfPage: canonical,
+      articleBody: entry.content,
+      inLanguage: 'en'
+    };
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(jsonLd);
+    document.head.appendChild(s);
+
+    var body = '';
+    var paras = entry.content.split(/\n\s*\n/).filter(Boolean);
+    for (var i = 0; i < paras.length; i++) {
+      body += '<p>' + esc(paras[i].trim()) + '</p>';
+    }
+
+    page.innerHTML =
+      '<article>' +
+        '<header class="entry-header">' +
+          '<time datetime="' + isoDate(entry.date) + '">' + esc(humanDate(entry.date)) + '</time>' +
+        '</header>' +
+        '<div class="entry-body">' + body + '</div>' +
+      '</article>';
+
+    var navHtml = '';
+    if (prevEntry) {
+      navHtml += '<a class="prev" href="/entry/' + esc(prevEntry.id) + '">← ' +
+                 esc(firstLine(prevEntry.content, 40) || prevEntry.id) + '</a>';
+    }
+    if (nextEntry) {
+      navHtml += '<a class="next" href="/entry/' + esc(nextEntry.id) + '">' +
+                 esc(firstLine(nextEntry.content, 40) || nextEntry.id) + ' →</a>';
+    }
+    nav.innerHTML = navHtml;
+  }
+
+  function renderErased(entry) {
+    var canonical = SITE_URL + '/entry/' + entry.id;
+    setCanonical(canonical);
+    document.title = 'Erased entry — ' + SITE_NAME;
+    setMeta({ description: 'This entry was erased by its author.', robots: 'noindex' });
+    page.innerHTML =
+      '<div class="notice erased">' +
+        '<time datetime="' + isoDate(entry.date) + '">' + esc(humanDate(entry.date)) + '</time>' +
+        '<br><br>This entry was erased.' +
+      '</div>';
+  }
+
+  async function load() {
+    if (!id) { showError('No entry ID specified.'); return; }
+
+    try {
+      var res = await fetch('/data/entries.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var data = await res.json();
+      var all = (data.entries || []).slice().sort(function (a, b) {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      });
+
+      var idx = -1;
+      for (var i = 0; i < all.length; i++) {
+        if (String(all[i].id) === id) { idx = i; break; }
+      }
+      if (idx === -1) { showError('Entry ' + id + ' was not found.'); return; }
+
+      var entry = all[idx];
+      if (entry.erased) { renderErased(entry); return; }
+
+      // Find prev/next non-erased
+      var prev = null, next = null;
+      for (var p = idx - 1; p >= 0; p--) if (!all[p].erased) { prev = all[p]; break; }
+      for (var n = idx + 1; n < all.length; n++) if (!all[n].erased) { next = all[n]; break; }
+
+      renderEntry(entry, prev, next);
+    } catch (err) {
+      showError('Could not load entry: ' + (err && err.message ? err.message : err));
+    }
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
