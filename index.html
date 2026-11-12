@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Diary Of Pearl Bipin</title>
+<meta name="description" content="The personal diary of Pearl Bipin Pulickal. An open book you can read, page by page.">
+<meta name="author" content="Pearl Bipin Pulickal">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://thediaryofpearlbipin.vercel.app/">
+
+<meta property="og:type" content="book">
+<meta property="og:title" content="The Diary Of Pearl Bipin">
+<meta property="og:description" content="An open book you can read, page by page.">
+<meta property="og:url" content="https://thediaryofpearlbipin.vercel.app/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  /* Paper & desk */
+  --paper:        #f7efd9;
+  --paper-edge:   #e9dcc0;
+  --paper-shadow: #d4c5a5;
+  --desk-top:     #4a3624;
+  --desk-bottom:  #201509;
+
+  /* Ink */
+  --ink:          #1a3a8a;   /* fountain-pen blue */
+  --ink-soft:     #4d5c9c;   /* muted blue for dates */
+  --ink-meta:     #7a6b58;   /* warm brown for page numbers */
+  --ui-ink:       #3a2f24;   /* neutral brown for controls */
+
+  /* Furniture */
+  --ribbon:       #8b1e3f;
+  --margin-line:  rgba(190, 70, 70, 0.16);
+  --rule-line:    rgba(100, 130, 180, 0.055);
+
+  /* Type */
+  --font-size:    22px;
+  --font-hand:    'Caveat', 'Kalam', 'Patrick Hand', cursive, sans-serif;
+  --font-serif:   'Lora', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-display: 'Dancing Script', 'Caveat', cursive;
+
+  /* Shadows */
+  --shadow-book: 0 30px 70px rgba(0, 0, 0, 0.45),
+                 0 10px 24px rgba(0, 0, 0, 0.30),
+                 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% -20%, var(--desk-top) 0%, var(--desk-bottom) 82%);
+  background-color: var(--desk-bottom);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem 5rem;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+body.ready { opacity: 1; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Masthead ---------- */
+.masthead {
+  text-align: center;
+  margin-bottom: 2.2rem;
+  max-width: 680px;
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 3.1rem;
+  line-height: 1.1;
+  margin: 0 0 0.4rem;
+  color: var(--paper);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35),
+               0 1px 2px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.01em;
+}
+.ornament {
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  letter-spacing: 0.5em;
+  color: rgba(247, 239, 217, 0.55);
+  user-select: none;
+}
+
+/* ---------- Book ---------- */
+.book-frame {
+  width: 100%;
+  max-width: 1080px;
+  position: relative;
+}
+
+.book {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--paper);
+  border-radius: 3px;
+  box-shadow: var(--shadow-book);
+  position: relative;
+  min-height: 70vh;
+}
+
+.book.flipping-next { animation: riffleNext 0.34s ease-out; }
+.book.flipping-prev { animation: rifflePrev 0.34s ease-out; }
+
+@keyframes riffleNext {
+  from { opacity: 0; transform: translateX(10px) scale(0.998); }
+  to   { opacity: 1; transform: translateX(0)   scale(1); }
+}
+@keyframes rifflePrev {
+  from { opacity: 0; transform: translateX(-10px) scale(0.998); }
+  to   { opacity: 1; transform: translateX(0)    scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book.flipping-next, .book.flipping-prev { animation: none; }
+}
+
+/* Spine shadow */
+.book::before {
+  content: '';
+  position: absolute;
+  inset: 0 50% 0 auto;
+  width: 72px;
+  transform: translateX(50%);
+  background: linear-gradient(to right,
+    rgba(60, 40, 20, 0) 0%,
+    rgba(60, 40, 20, 0.10) 48%,
+    rgba(60, 40, 20, 0) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Ribbon bookmark at the spine */
+.book::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 52%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 44px;
+  background: var(--ribbon);
+  background-image: linear-gradient(to bottom,
+    rgba(255,255,255,0.15) 0%,
+    rgba(0,0,0,0) 40%,
+    rgba(0,0,0,0.15) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  z-index: 4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Pages ---------- */
+.page {
+  padding: 3.4rem 3.1rem 4.4rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 37px,
+      var(--rule-line) 37px,
+      var(--rule-line) 38px
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.page-left {
+  background-image:
+    linear-gradient(to right, rgba(60, 40, 20, 0.035), rgba(60, 40, 20, 0) 26%),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 37px,
+      var(--rule-line) 37px,
+      var(--rule-line) 38px
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border-right: 1px solid var(--paper-edge);
+}
+.page-right {
+  background-image:
+    linear-gradient(to left, rgba(60, 40, 20, 0.035), rgba(60, 40, 20, 0) 26%),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 37px,
+      var(--rule-line) 37px,
+      var(--rule-line) 38px
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Red margin lines, outer edges (classic notebook) */
+.page-left::before,
+.page-right::before {
+  content: '';
+  position: absolute;
+  top: 2.2rem;
+  bottom: 2.2rem;
+  width: 1px;
+  background: var(--margin-line);
+  pointer-events: none;
+}
+.page-left::before  { left:  2rem; }
+.page-right::before { right: 2rem; }
+
+/* Page curl (subtle lift at outer bottom corners) */
+.page-left::after,
+.page-right::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 46px;
+  height: 46px;
+  pointer-events: none;
+  z-index: 1;
+}
+.page-left::after {
+  left: 0;
+  background: linear-gradient(45deg,
+    transparent 50%,
+    rgba(140, 125, 100, 0.14) 50%);
+}
+.page-right::after {
+  right: 0;
+  background: linear-gradient(225deg,
+    transparent 50%,
+    rgba(140, 125, 100, 0.14) 50%);
+}
+
+.page-empty {
+  background-color: var(--paper-edge);
+  background-image: none;
+}
+
+/* ---------- Entry typography ---------- */
+.entry {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.entry-header {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  margin-bottom: 1.65rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px dashed var(--paper-shadow);
+}
+.entry-header time { font-style: italic; }
+.entry-header-cont time { opacity: 0.6; font-size: 0.9rem; }
+
+.entry-body {
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: var(--font-size);
+  line-height: 1.7;
+  color: var(--ink);
+  flex: 1;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 0.4px currentColor; /* subtle ink weight */
+}
+.entry-body p {
+  margin: 0 0 1em;
+}
+.entry-body p:last-child { margin-bottom: 0; }
+.entry-body p.search-hit {
+  background: rgba(255, 215, 100, 0.45);
+  transition: background 0.6s ease;
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px rgba(255, 215, 100, 0.45);
+}
+
+/* Serif mode */
+[data-font="serif"] .entry-body,
+[data-font="serif"] .entry-header {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-shadow: none;
+}
+[data-font="serif"] .entry-body { line-height: 1.72; }
+
+.page-footer {
+  position: absolute;
+  bottom: 1.35rem;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-meta);
+  opacity: 0.65;
+  z-index: 2;
+}
+
+.page-erased .entry-body { display: none; }
+.page-erased::before { /* keep margin line on erased page */ content: ''; }
+
+/* ---------- Loading / error ---------- */
+.book-notice {
+  grid-column: 1 / -1;
+  padding: 5rem 2rem;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.book-notice.error { color: #8b1e3f; font-style: normal; }
+.book-notice.error code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  background: rgba(0,0,0,0.05);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+/* ---------- Controls ---------- */
+.book-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 1.9rem;
+  font-family: var(--font-hand);
+}
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid rgba(247, 239, 217, 0.35);
+  color: var(--paper);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  line-height: 1;
+}
+.icon-btn:hover:not(:disabled) {
+  background: var(--paper);
+  color: var(--ui-ink);
+  border-color: var(--paper);
+  transform: translateY(-1px);
+}
+.icon-btn:disabled { opacity: 0.22; cursor: default; }
+
+.page-counter {
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  color: rgba(247, 239, 217, 0.75);
+  min-width: 12rem;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- Scrubber ---------- */
+.scrubber-wrap {
+  max-width: 540px;
+  margin: 1rem auto 0;
+  padding: 0 0.5rem;
+}
+.scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: rgba(247, 239, 217, 0.20);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ui-ink);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  cursor: pointer;
+}
+.scrubber::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ui-ink);
+  cursor: pointer;
+}
+
+/* ---------- Tools ---------- */
+.book-tools {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 1.3rem;
+}
+.tool-btn {
+  background: transparent;
+  border: none;
+  color: rgba(247, 239, 217, 0.55);
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.tool-btn:hover {
+  color: var(--paper);
+  background: rgba(247, 239, 217, 0.08);
+}
+
+/* ---------- Search overlay ---------- */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 12, 5, 0.42);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  z-index: 40;
+}
+.search-overlay[hidden] { display: none; }
+
+.search-box {
+  background: var(--paper);
+  border-radius: 3px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+  padding: 1.3rem 1.5rem;
+  width: min(540px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-family: var(--font-hand);
+}
+.search-box input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--paper-shadow);
+  background: transparent;
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  padding: 0.5rem 0;
+  color: var(--ink);
+  outline: none;
+}
+.search-box input::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.55;
+}
+.search-status {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  min-height: 1.2em;
+}
+
+/* ---------- Font popover ---------- */
+.font-popover {
+  position: fixed;
+  bottom: 2.2rem;
+  right: 1.8rem;
+  background: var(--paper);
+  border-radius: 4px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.1rem;
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-width: 210px;
+  color: var(--ui-ink);
+}
+.font-popover[hidden] { display: none; }
+
+.font-controls { display: flex; gap: 0.4rem; }
+.font-controls button {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(58, 47, 36, 0.3);
+  color: var(--ui-ink);
+  padding: 0.4rem 0.5rem;
+  border-radius: 2px;
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+.font-controls button:hover { background: var(--ui-ink); color: var(--paper); }
+
+.font-style-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed var(--paper-shadow);
+}
+.font-style-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--ui-ink);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 800px) {
+  body { padding: 2rem 0.75rem 4rem; }
+  .masthead { margin-bottom: 1.6rem; }
+  .masthead h1 { font-size: 2.15rem; }
+  .book { grid-template-columns: 1fr; min-height: 64vh; }
+  .book::before,
+  .book::after { display: none; }
+  .page-left { border-right: none; }
+  .page-right { display: none; }
+  .page { padding: 2.1rem 1.6rem 3.2rem; min-height: 64vh; }
+  .page-left::before, .page-right::before { display: none; }
+  .entry-body { font-size: calc(var(--font-size) - 1px); }
+  .page-counter { min-width: 8rem; font-size: 0.95rem; }
+  .font-popover { right: 1rem; bottom: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <h1>The Diary Of Pearl Bipin</h1>
+  <div class="ornament" aria-hidden="true">· · ·</div>
+</header>
+
+<main class="book-frame">
+  <div class="book" id="book" aria-live="polite">
+    <div class="page page-left" id="page-left"></div>
+    <div class="page page-right" id="page-right"></div>
+  </div>
+
+  <nav class="book-controls" aria-label="Page navigation">
+    <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">&larr;</button>
+    <span class="page-counter" id="page-counter"></span>
+    <button id="next" class="icon-btn" type="button" aria-label="Next pages">&rarr;</button>
+  </nav>
+
+  <div class="scrubber-wrap">
+    <input type="range" id="scrubber" class="scrubber" min="1" max="1" value="1"
+           aria-label="Jump to page">
+  </div>
+
+  <div class="book-tools" role="toolbar" aria-label="Tools">
+    <button class="tool-btn" id="random-btn" type="button" title="Random page (r)">&#9860;</button>
+    <button class="tool-btn" id="search-btn" type="button" title="Search (Ctrl+K or /)">&#9906;</button>
+    <button class="tool-btn" id="font-btn" type="button" title="Text settings">Aa</button>
+  </div>
+</main>
+
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search">
+    <input type="search" id="search-input" placeholder="Search the diary…" autocomplete="off">
+    <span class="search-status" id="search-status" aria-live="polite"></span>
+  </div>
+</div>
+
+<div class="font-popover" id="font-popover" hidden>
+  <div class="font-controls">
+    <button id="font-dec" type="button" aria-label="Smaller text">A&minus;</button>
+    <button id="font-inc" type="button" aria-label="Larger text">A+</button>
+  </div>
+  <div class="font-style-toggle">
+    <label><input type="radio" name="font-style" value="handwriting" checked> Handwriting</label>
+    <label><input type="radio" name="font-style" value="serif"> Serif</label>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Utilities ---------- */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+  function isoDate(d) { return new Date(d).toISOString().slice(0, 10); }
+  function humanDate(d) {
+    return new Date(d).toLocaleDateString('en-US',
+      { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  /* ---------- Pagination ---------- */
+  function splitIntoParagraphs(text) {
+    var raw = String(text).split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+    var out = [];
+    for (var i = 0; i < raw.length; i++) {
+      var para = raw[i];
+      if (para.length <= 520) {
+        out.push(para);
+      } else {
+        var sentences = para.split(/(?<=[.!?])\s+/);
+        var buffer = '';
+        for (var j = 0; j < sentences.length; j++) {
+          var s = sentences[j];
+          if (buffer && (buffer + ' ' + s).length > 380) {
+            out.push(buffer.trim());
+            buffer = s;
+          } else {
+            buffer = buffer ? buffer + ' ' + s : s;
+          }
+        }
+        if (buffer.trim()) out.push(buffer.trim());
+      }
+    }
+    return out;
+  }
+
+  function paginateEntry(entry) {
+    var paras = splitIntoParagraphs(entry.content);
+    if (!paras.length) paras = [''];
+    var chunks = [];
+    var cur = [];
+    var chars = 0;
+    for (var i = 0; i < paras.length; i++) {
+      var p = paras[i];
+      var wouldExceed = cur.length >= 3 || (chars + p.length > 720 && cur.length > 0);
+      if (wouldExceed) {
+        chunks.push(cur);
+        cur = [];
+        chars = 0;
+      }
+      cur.push(p);
+      chars += p.length;
+    }
+    if (cur.length) chunks.push(cur);
+    return chunks;
+  }
+
+  function paginate(entries) {
+    var pages = [];
+    for (var i = 0; i < entries.length; i++) {
+      var entry = entries[i];
+      if (entry.erased) {
+        var n = entry._pageCount || 1;
+        for (var k = 0; k < n; k++) {
+          pages.push({
+            entry: entry,
+            blank: true,
+            pageNumber: pages.length + 1,
+            isStart: k === 0
+          });
+        }
+        continue;
+      }
+      var chunks = paginateEntry(entry);
+      for (var c = 0; c < chunks.length; c++) {
+        pages.push({
+          entry: entry,
+          paragraphs: chunks[c],
+          pageNumber: pages.length + 1,
+          isStart: c === 0
+        });
+      }
+    }
+    return pages;
+  }
+
+  /* ---------- Refs ---------- */
+  var book      = document.getElementById('book');
+  var pageLeft  = document.getElementById('page-left');
+  var pageRight = document.getElementById('page-right');
+  var counter   = document.getElementById('page-counter');
+  var prevBtn   = document.getElementById('prev');
+  var nextBtn   = document.getElementById('next');
+  var scrubber  = document.getElementById('scrubber');
+
+  var mqSpread = window.matchMedia('(min-width: 801px)');
+  var isSpread = mqSpread.matches;
+
+  /* ---------- State ---------- */
+  var entries = [];
+  var pages   = [];
+  var cursor  = 0;
+
+  /* ---------- Render ---------- */
+  function renderPage(el, page) {
+    el.classList.remove('page-empty', 'page-erased');
+
+    if (!page) {
+      el.innerHTML = '';
+      el.classList.add('page-empty');
+      el.setAttribute('aria-hidden', 'true');
+      return;
+    }
+    el.removeAttribute('aria-hidden');
+
+    if (page.blank) {
+      el.classList.add('page-erased');
+      el.innerHTML =
+        '<div class="page-footer" aria-hidden="true">' + page.pageNumber + '</div>';
+      return;
+    }
+
+    var e = page.entry;
+    var articleId = page.isStart ? ' id="entry-' + esc(e.id) + '"' : '';
+    var articleClass = page.isStart ? 'entry' : 'entry entry-continuation';
+    var dataAttr = page.isStart ? '' : ' data-entry-id="' + esc(e.id) + '"';
+
+    var header;
+    if (page.isStart) {
+      header = '<header class="entry-header"><time datetime="' + isoDate(e.date) + '">' +
+               esc(humanDate(e.date)) + '</time></header>';
+    } else {
+      header = '<header class="entry-header entry-header-cont"><time datetime="' +
+               isoDate(e.date) + '">continued</time></header>';
+    }
+
+    var body = '';
+    for (var i = 0; i < page.paragraphs.length; i++) {
+      body += '<p>' + esc(page.paragraphs[i]) + '</p>';
+    }
+
+    el.innerHTML =
+      '<article class="' + articleClass + '"' + articleId + dataAttr + '>' +
+        header +
+        '<div class="entry-body">' + body + '</div>' +
+      '</article>' +
+      '<div class="page-footer" aria-hidden="true">' + page.pageNumber + '</div>';
+  }
+
+  function snapCursor() {
+    if (!pages.length) { cursor = 0; return; }
+    if (isSpread) {
+      cursor = Math.min(cursor, pages.length - 1);
+      cursor = cursor - (cursor % 2);
+    } else {
+      cursor = Math.min(Math.max(0, cursor), pages.length - 1);
+    }
+    if (cursor < 0) cursor = 0;
+  }
+
+  function maxCursor() {
+    if (!pages.length) return 0;
+    if (isSpread) return (pages.length - 1) - ((pages.length - 1) % 2);
+    return pages.length - 1;
+  }
+
+  function render() {
+    snapCursor();
+
+    if (isSpread) {
+      renderPage(pageLeft,  pages[cursor]);
+      renderPage(pageRight, pages[cursor + 1]);
+      var start = cursor + 1;
+      var end   = Math.min(cursor + 2, pages.length);
+      counter.textContent = pages.length
+        ? (start === end ? 'Page ' + end : 'Pages ' + start + '\u2013' + end) +
+          ' of ' + pages.length
+        : 'empty';
+    } else {
+      renderPage(pageLeft, pages[cursor]);
+      pageRight.innerHTML = '';
+      pageRight.classList.add('page-empty');
+      pageRight.setAttribute('aria-hidden', 'true');
+      counter.textContent = pages.length
+        ? 'Page ' + (cursor + 1) + ' of ' + pages.length
+        : 'empty';
+    }
+
+    prevBtn.disabled = cursor <= 0;
+    nextBtn.disabled = pages.length === 0 || cursor >= maxCursor();
+
+    scrubber.min   = 1;
+    scrubber.max   = Math.max(1, pages.length);
+    scrubber.value = pages.length ? cursor + 1 : 1;
+    scrubber.disabled = pages.length <= 1;
+
+    try { localStorage.setItem('diary:page', String(cursor)); } catch (e) {}
+  }
+
+  function flip(dir) {
+    book.classList.remove('flipping-next', 'flipping-prev');
+    void book.offsetWidth;
+    render();
+    if (pages.length) book.classList.add(dir === 'next' ? 'flipping-next' : 'flipping-prev');
+  }
+
+  function next() { if (!nextBtn.disabled) { cursor += isSpread ? 2 : 1; flip('next'); } }
+  function prev() { if (!prevBtn.disabled) { cursor -= isSpread ? 2 : 1; flip('prev'); } }
+
+  function gotoPage(idx, dir) {
+    cursor = isSpread ? idx - (idx % 2) : idx;
+    flip(dir || 'next');
+  }
+
+  function randomPage() {
+    var valid = [];
+    for (var i = 0; i < pages.length; i++) if (!pages[i].blank) valid.push(i);
+    if (!valid.length) return;
+    var target = valid[Math.floor(Math.random() * valid.length)];
+    gotoPage(target, 'next');
+  }
+
+  /* ---------- Font controls ---------- */
+  var fontBtn = document.getElementById('font-btn');
+  var fontPopover = document.getElementById('font-popover');
+  var root = document.documentElement;
+  var currentSize = parseFloat(localStorage.getItem('diary:fontSize')) || 22;
+  var currentStyle = localStorage.getItem('diary:fontStyle') || 'handwriting';
+
+  applyFontSize(currentSize);
+  applyFontStyle(currentStyle);
+
+  function applyFontSize(px) {
+    px = Math.max(16, Math.min(30, px));
+    currentSize = px;
+    root.style.setProperty('--font-size', px + 'px');
+    try { localStorage.setItem('diary:fontSize', String(px)); } catch (e) {}
+  }
+  function applyFontStyle(style) {
+    currentStyle = style;
+    if (style === 'serif') root.setAttribute('data-font', 'serif');
+    else root.removeAttribute('data-font');
+    var radios = document.querySelectorAll('input[name="font-style"]');
+    radios.forEach(function (r) { r.checked = (r.value === style); });
+    try { localStorage.setItem('diary:fontStyle', style); } catch (e) {}
+  }
+
+  fontBtn.addEventListener('click', function (ev) {
+    ev.stopPropagation();
+    fontPopover.hidden = !fontPopover.hidden;
+  });
+  document.getElementById('font-dec').addEventListener('click', function () { applyFontSize(currentSize - 1); });
+  document.getElementById('font-inc').addEventListener('click', function () { applyFontSize(currentSize + 1); });
+  document.querySelectorAll('input[name="font-style"]').forEach(function (r) {
+    r.addEventListener('change', function () { if (r.checked) applyFontStyle(r.value); });
+  });
+  document.addEventListener('click', function (ev) {
+    if (!fontPopover.hidden &&
+        !fontPopover.contains(ev.target) &&
+        ev.target !== fontBtn) {
+      fontPopover.hidden = true;
+    }
+  });
+
+  /* ---------- Search ---------- */
+  var searchBtn = document.getElementById('search-btn');
+  var searchOverlay = document.getElementById('search-overlay');
+  var searchInput = document.getElementById('search-input');
+  var searchStatus = document.getElementById('search-status');
+
+  function openSearch() {
+    searchOverlay.hidden = false;
+    searchInput.value = '';
+    searchStatus.textContent = '';
+    setTimeout(function () { searchInput.focus(); }, 30);
+  }
+  function closeSearch() { searchOverlay.hidden = true; }
+
+  searchBtn.addEventListener('click', openSearch);
+  searchOverlay.addEventListener('click', function (ev) {
+    if (ev.target === searchOverlay) closeSearch();
+  });
+  searchInput.addEventListener('input', function () { searchStatus.textContent = ''; });
+  searchInput.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      var q = searchInput.value.trim();
+      if (!q) return;
+      var idx = findPageContaining(q);
+      if (idx === -1) {
+        searchStatus.textContent = 'No match found.';
+        return;
+      }
+      closeSearch();
+      gotoPage(idx, idx >= cursor ? 'next' : 'prev');
+      setTimeout(function () { highlightMatches(q); }, 60);
+    } else if (ev.key === 'Escape') {
+      closeSearch();
+    }
+  });
+
+  function findPageContaining(q) {
+    var needle = q.toLowerCase();
+    for (var i = 0; i < pages.length; i++) {
+      var p = pages[i];
+      if (!p.paragraphs) continue;
+      for (var j = 0; j < p.paragraphs.length; j++) {
+        if (p.paragraphs[j].toLowerCase().indexOf(needle) !== -1) return i;
+      }
+    }
+    return -1;
+  }
+
+  function highlightMatches(q) {
+    var needle = q.toLowerCase();
+    document.querySelectorAll('.entry-body p').forEach(function (el) {
+      if (el.textContent.toLowerCase().indexOf(needle) !== -1) {
+        el.classList.add('search-hit');
+        setTimeout(function () { el.classList.remove('search-hit'); }, 2600);
+      }
+    });
+  }
+
+  /* ---------- Keyboard ---------- */
+  document.addEventListener('keydown', function (ev) {
+    var t = ev.target;
+    if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown' || ev.key === 'PageDown' || ev.key === ' ') {
+      ev.preventDefault(); next();
+    } else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp' || ev.key === 'PageUp') {
+      ev.preventDefault(); prev();
+    } else if (ev.key === 'Home') {
+      ev.preventDefault(); gotoPage(0, 'prev');
+    } else if (ev.key === 'End') {
+      ev.preventDefault(); gotoPage(maxCursor(), 'next');
+    } else if ((ev.ctrlKey || ev.metaKey) && (ev.key === 'k' || ev.key === 'K')) {
+      ev.preventDefault(); openSearch();
+    } else if (ev.key === '/') {
+      ev.preventDefault(); openSearch();
+    } else if (ev.key === 'r' || ev.key === 'R') {
+      ev.preventDefault(); randomPage();
+    } else if (ev.key === '-' || ev.key === '_') {
+      ev.preventDefault(); applyFontSize(currentSize - 1);
+    } else if (ev.key === '=' || ev.key === '+') {
+      ev.preventDefault(); applyFontSize(currentSize + 1);
+    } else if (ev.key === 'Escape') {
+      if (!searchOverlay.hidden) closeSearch();
+      if (!fontPopover.hidden) fontPopover.hidden = true;
+    }
+  });
+
+  /* ---------- Responsive ---------- */
+  mqSpread.addEventListener('change', function (ev) {
+    isSpread = ev.matches;
+    render();
+  });
+
+  book.addEventListener('animationend', function (ev) {
+    if (ev.target && ev.target.classList && ev.target.classList.contains('page')) {
+      book.classList.remove('flipping-next', 'flipping-prev');
+    }
+  });
+
+  /* ---------- Hash deep-link ---------- */
+  function jumpToHash() {
+    var hash = window.location.hash;
+    if (!hash || hash.indexOf('#entry-') !== 0) return;
+    var id = hash.slice('#entry-'.length);
+    for (var i = 0; i < pages.length; i++) {
+      if (pages[i].entry && String(pages[i].entry.id) === id && pages[i].isStart) {
+        gotoPage(i, 'next');
+        return;
+      }
+    }
+  }
+  window.addEventListener('hashchange', jumpToHash);
+
+  /* ---------- JSON-LD ---------- */
+  function injectJsonLd() {
+    var items = [];
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      if (!e || e.erased) continue;
+      items.push({
+        '@type': 'ListItem',
+        position: items.length + 1,
+        item: {
+          '@type': 'Article',
+          '@id': 'https://thediaryofpearlbipin.vercel.app/#entry-' + e.id,
+          identifier: String(e.id),
+          datePublished: e.date,
+          articleBody: e.content
+        }
+      });
+    }
+    var ld = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'The Diary Of Pearl Bipin — entries',
+      itemListElement: items
+    };
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(ld);
+    document.head.appendChild(s);
+  }
+
+  /* ---------- Boot ---------- */
+  function showLoading() {
+    book.innerHTML =
+      '<div class="book-notice">opening the book…</div>';
+  }
+
+  function showError(err) {
+    book.innerHTML =
+      '<div class="book-notice error">' +
+        'The book could not be opened.<br>' +
+        '<code>' + esc(err && err.message ? err.message : String(err)) + '</code>' +
+        '<br><br>' +
+        'If you opened this file directly from disk (file://), ' +
+        'try the live site instead.' +
+      '</div>';
+    document.body.classList.add('ready');
+  }
+
+  function boot(data) {
+    entries = (data.entries || []).slice().sort(function (a, b) {
+      var da = new Date(a.date).getTime();
+      var db = new Date(b.date).getTime();
+      if (da !== db) return da - db;
+      return String(a.id).localeCompare(String(b.id));
+    });
+    pages = paginate(entries);
+
+    // restore resume bookmark
+    try {
+      var saved = parseInt(localStorage.getItem('diary:page'), 10);
+      if (!isNaN(saved) && saved > 0 && saved < pages.length) cursor = saved;
+    } catch (e) {}
+
+    injectJsonLd();
+    render();
+    jumpToHash();
+    document.body.classList.add('ready');
+  }
+
+  async function load() {
+    showLoading();
+    try {
+      var res = await fetch('/data/entries.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status + ' while loading entries');
+      var data = await res.json();
+      boot(data);
+    } catch (err) {
+      showError(err);
+    }
+  }
+
+  // Reset grid so the notice spans full width while loading
+  var style = document.createElement('style');
+  style.textContent = '.book > .book-notice { grid-column: 1 / -1; }';
+  document.head.appendChild(style);
+
+  document.addEventListener('DOMContentLoaded', load);
+  if (document.readyState !== 'loading') load();
+})();
+</script>
+</body>
+</html>
