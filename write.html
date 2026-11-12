@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Write — The Diary Of Pearl Bipin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f7efd9;
+  --paper-edge: #e9dcc0;
+  --ink: #1a3a8a;
+  --ink-soft: #4d5c9c;
+  --ui-ink: #3a2f24;
+  --desk-top: #4a3624;
+  --desk-bottom: #201509;
+  --danger: #8b1e3f;
+  --success: #2d6a4f;
+  --font-hand: 'Caveat', 'Kalam', cursive, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  --font-display: 'Dancing Script', cursive;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+body {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% -20%, var(--desk-top) 0%, var(--desk-bottom) 82%);
+  color: var(--ui-ink);
+  font-family: var(--font-hand);
+  -webkit-font-smoothing: antialiased;
+  padding: 2.5rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrap { width: 100%; max-width: 720px; animation: fade 0.4s ease both; }
+
+.header { text-align: center; margin-bottom: 1.8rem; }
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  margin: 0 0 0.3rem;
+  color: var(--paper);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+.header p { color: rgba(247,239,217,0.6); margin: 0; font-size: 1rem; }
+.header a { color: rgba(247,239,217,0.85); text-decoration: underline; text-underline-offset: 3px; }
+
+.card {
+  background: var(--paper);
+  border-radius: 3px;
+  box-shadow: 0 20px 55px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.2);
+  padding: 2rem 2.2rem;
+  margin-bottom: 1.5rem;
+  animation: fade 0.4s ease both;
+}
+.card[hidden] { display: none; }
+
+.card h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin: 0 0 0.8rem;
+  color: var(--ui-ink);
+}
+.card p, .card li {
+  font-family: var(--font-hand);
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--ui-ink);
+}
+.card p { margin: 0 0 1rem; }
+.card ol, .card ul { margin: 0 0 1rem; padding-left: 1.4rem; }
+.card li { margin-bottom: 0.5rem; }
+.card a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.card code {
+  font-family: ui-monospace, monospace;
+  background: rgba(58,47,36,0.08);
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 0.9em;
+}
+
+input[type="password"], input[type="text"], textarea {
+  width: 100%;
+  border: 1px solid var(--paper-edge);
+  border-radius: 2px;
+  background: #fffdf6;
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  padding: 0.7rem 0.9rem;
+  color: var(--ui-ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+input[type="password"]:focus, input[type="text"]:focus, textarea:focus {
+  border-color: var(--ink);
+}
+
+textarea {
+  min-height: 280px;
+  line-height: 1.65;
+  resize: vertical;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.btn {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  padding: 0.75rem 1.6rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-primary:hover:not(:disabled) { background: #142d6d; }
+.btn-secondary {
+  background: transparent;
+  color: var(--ui-ink);
+  border: 1px solid var(--ui-ink);
+}
+.btn-secondary:hover:not(:disabled) { background: var(--ui-ink); color: var(--paper); }
+.btn-link {
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+}
+.btn-link:hover { color: var(--ink); }
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.92rem;
+  font-family: var(--font-hand);
+  border-radius: 2px;
+  cursor: pointer;
+}
+.btn-danger:hover { background: var(--danger); color: var(--paper); }
+
+.form-row {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 1.2rem;
+}
+.form-row .btn { min-width: 180px; }
+
+.feedback {
+  margin-top: 1.2rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 2px;
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  animation: fade 0.3s ease both;
+}
+.feedback[hidden] { display: none; }
+.feedback.success { background: rgba(45,106,79,0.12); color: var(--success); border-left: 3px solid var(--success); }
+.feedback.error { background: rgba(139,30,63,0.10); color: var(--danger); border-left: 3px solid var(--danger); }
+.feedback.info { background: rgba(77,92,156,0.10); color: var(--ink-soft); border-left: 3px solid var(--ink-soft); }
+.feedback a { color: inherit; font-weight: 600; text-decoration: underline; }
+.feedback code { background: rgba(0,0,0,0.08); padding: 1px 5px; border-radius: 2px; font-size: 0.9em; }
+
+.entries-list {
+  max-height: 360px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  padding-right: 0.3rem;
+}
+.entry-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--paper-edge);
+  font-family: var(--font-hand);
+  font-size: 1rem;
+}
+.entry-item:last-child { border-bottom: none; }
+.entry-item .meta { flex: 1; color: var(--ui-ink); }
+.entry-item .date { font-size: 0.9rem; color: var(--ink-soft); margin-right: 0.6rem; }
+.entry-item .preview { color: var(--ink-soft); font-size: 0.92rem; }
+.entry-item.erased .preview { font-style: italic; opacity: 0.6; }
+
+.footer-note {
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 0.95rem;
+  color: rgba(247,239,217,0.5);
+  margin-top: 2rem;
+}
+.footer-note button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+.footer-note button:hover { color: var(--paper); }
+
+.hint {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin-top: 0.7rem;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  body { padding: 1.5rem 0.75rem 3rem; }
+  .header h1 { font-size: 1.9rem; }
+  .card { padding: 1.5rem 1.3rem; }
+  .card h2 { font-size: 1.5rem; }
+  .form-row { flex-direction: column; align-items: stretch; }
+  .form-row .btn { min-width: 0; width: 100%; }
+  textarea { min-height: 220px; font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <h1>Write in the diary</h1>
+    <p><a href="/">← back to the book</a></p>
+  </div>
+
+  <!-- ============= SETUP VIEW ============= -->
+  <div class="card" id="setup-view" hidden>
+    <h2>Set up your pen</h2>
+    <p>To write, you paste a <strong>GitHub token</strong> once. It's stored only in this browser. Every write after this is one click.</p>
+
+    <ol>
+      <li>
+        Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">
+        github.com/settings/personal-access-tokens/new</a>
+      </li>
+      <li>Token name: <code>Diary write token</code></li>
+      <li>Expiration: <strong>No expiration</strong> (or 1 year — your call)</li>
+      <li>Repository access → <strong>Only select repositories</strong> → <code>TheDiaryOfPearlBipin</code></li>
+      <li>Permissions → Repository permissions → <strong>Contents: Read and write</strong></li>
+      <li>Generate token → copy it (starts with <code>github_pat_</code>)</li>
+    </ol>
+
+    <p>Paste it here:</p>
+    <input type="password" id="token-input" placeholder="github_pat_..." autocomplete="off" spellcheck="false">
+    <div class="form-row">
+      <button class="btn btn-primary" id="save-token-btn" type="button">Save token</button>
+    </div>
+    <div class="feedback error" id="setup-feedback" hidden></div>
+  </div>
+
+  <!-- ============= WRITE VIEW ============= -->
+  <div class="card" id="write-view" hidden>
+    <h2>Today's entry</h2>
+    <p class="hint">Write freely. Each line break becomes a paragraph. Once written, the words are permanent.</p>
+
+    <textarea id="content" placeholder="What's on your mind, Pearl?"></textarea>
+
+    <div class="form-row">
+      <button class="btn btn-primary" id="write-btn" type="button">Write in diary</button>
+      <button class="btn-link" id="forget-token-btn" type="button">Forget token on this device</button>
+    </div>
+
+    <div class="feedback" id="write-feedback" hidden></div>
+
+    <details style="margin-top: 2rem;">
+      <summary style="cursor: pointer; font-family: var(--font-hand); font-size: 1.05rem; color: var(--ink-soft);">
+        Manage entries (erase)
+      </summary>
+      <div class="entries-list" id="entries-list" style="margin-top: 1rem;"></div>
+    </details>
+  </div>
+
+  <p class="footer-note" id="footer-note"></p>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Config ----------
+  var OWNER  = 'pearlbipin';
+  var REPO   = 'TheDiaryOfPearlBipin';
+  var BRANCH = 'main';
+  var FILE   = 'data/entries.json';
+  var STORAGE_KEY = 'diary:ghToken';
+
+  // ---------- Safe storage ----------
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+    del: function (k) { try { localStorage.removeItem(k); } catch (e) {} }
+  };
+
+  // ---------- Refs ----------
+  var setupView     = document.getElementById('setup-view');
+  var writeView     = document.getElementById('write-view');
+  var tokenInput    = document.getElementById('token-input');
+  var saveTokenBtn  = document.getElementById('save-token-btn');
+  var setupFeedback = document.getElementById('setup-feedback');
+  var content       = document.getElementById('content');
+  var writeBtn      = document.getElementById('write-btn');
+  var forgetBtn     = document.getElementById('forget-token-btn');
+  var writeFeedback = document.getElementById('write-feedback');
+  var entriesList   = document.getElementById('entries-list');
+  var footerNote    = document.getElementById('footer-note');
+
+  // ---------- Helpers ----------
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+  function humanDate(d) {
+    return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  function todayISO() { return new Date().toISOString().slice(0, 10); }
+  function nowISO()   { return new Date().toISOString(); }
+
+  function normalizeContent(raw) {
+    return String(raw)
+      .replace(/\r\n?/g, '\n')
+      .split(/\n+/)
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean)
+      .join('\n\n');
+  }
+
+  function nextId(entries, dateStr) {
+    var prefix = dateStr + '-';
+    var max = 0;
+    for (var i = 0; i < entries.length; i++) {
+      var id = entries[i].id || '';
+      if (id.indexOf(prefix) === 0) {
+        var n = parseInt(id.slice(prefix.length), 10);
+        if (!isNaN(n) && n > max) max = n;
+      }
+    }
+    return prefix + String(max + 1).padStart(3, '0');
+  }
+
+  function estimatePageCount(contentText) {
+    var paras = contentText.split(/\n\s*\n/).filter(Boolean);
+    var pages = 1, chars = 0, count = 0;
+    for (var i = 0; i < paras.length; i++) {
+      var p = paras[i];
+      if (count >= 3 || chars + p.length > 720) {
+        pages++;
+        chars = p.length;
+        count = 1;
+      } else {
+        chars += p.length;
+        count++;
+      }
+    }
+    return pages;
+  }
+
+  // ---------- Base64 UTF-8 ----------
+  function b64Encode(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64Decode(b64) {
+    var bin = atob(String(b64).replace(/\s/g, ''));
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  // ---------- GitHub API ----------
+  function ghHeaders(token) {
+    return {
+      'Authorization': 'Bearer ' + token,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+  }
+
+  async function fetchEntries(token) {
+    var url = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FILE +
+              '?ref=' + BRANCH + '&_=' + Date.now();
+    var res = await fetch(url, { headers: ghHeaders(token), cache: 'no-store' });
+    if (!res.ok) {
+      var t = await res.text();
+      throw new Error('GitHub GET failed (' + res.status + '): ' + t.slice(0, 200));
+    }
+    var j = await res.json();
+    var text = b64Decode(j.content);
+    return { data: JSON.parse(text), sha: j.sha };
+  }
+
+  async function putEntries(token, data, sha, message) {
+    var json = JSON.stringify(data, null, 2) + '\n';
+    var url = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FILE;
+    var res = await fetch(url, {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders(token)),
+      body: JSON.stringify({
+        message: message,
+        content: b64Encode(json),
+        sha: sha,
+        branch: BRANCH
+      })
+    });
+    if (!res.ok) {
+      var t = await res.text();
+      throw new Error('GitHub PUT failed (' + res.status + '): ' + t.slice(0, 200));
+    }
+    return await res.json();
+  }
+
+  // ---------- UI helpers ----------
+  function showFeedback(el, kind, html) {
+    el.className = 'feedback ' + kind;
+    el.innerHTML = html;
+    el.hidden = false;
+  }
+  function hideFeedback(el) {
+    el.hidden = true;
+    el.innerHTML = '';
+  }
+  function setBusy(btn, busy, label) {
+    if (busy) {
+      btn.dataset.orig = btn.textContent;
+      btn.textContent = label || 'Working…';
+      btn.disabled = true;
+    } else {
+      btn.textContent = btn.dataset.orig || btn.textContent;
+      btn.disabled = false;
+    }
+  }
+
+  // ---------- Mode selection ----------
+  function getToken() {
+    return store.get(STORAGE_KEY);
+  }
+
+  function showSetup() {
+    setupView.hidden = false;
+    writeView.hidden = true;
+    footerNote.textContent = '';
+  }
+
+  async function showWrite() {
+    setupView.hidden = true;
+    writeView.hidden = false;
+    footerNote.innerHTML =
+      'Signed in as the writer. <button id="footer-forget" type="button">Forget token</button>';
+    var ff = document.getElementById('footer-forget');
+    if (ff) ff.addEventListener('click', forgetToken);
+
+    await refreshEntries();
+  }
+
+  async function refreshEntries() {
+    var token = getToken();
+    if (!token) return;
+    try {
+      var result = await fetchEntries(token);
+      var entries = (result.data.entries || []).slice().sort(function (a, b) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+      renderEntriesList(entries);
+    } catch (err) {
+      entriesList.innerHTML =
+        '<p style="color: var(--danger); font-size: 0.95rem;">' +
+        'Could not load entries: ' + esc(err.message) + '</p>';
+    }
+  }
+
+  function renderEntriesList(entries) {
+    if (!entries.length) {
+      entriesList.innerHTML = '<p style="color: var(--ink-soft); font-size: 0.95rem;">No entries yet.</p>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      var preview = e.erased
+        ? '(erased)'
+        : (e.content || '').replace(/\s+/g, ' ').slice(0, 70);
+      html +=
+        '<div class="entry-item' + (e.erased ? ' erased' : '') + '">' +
+          '<div class="meta">' +
+            '<span class="date">' + esc(humanDate(e.date)) + '</span>' +
+            '<span class="preview">' + esc(preview) + '</span>' +
+          '</div>' +
+          (e.erased
+            ? ''
+            : '<button class="btn-danger" data-erase="' + esc(e.id) + '" type="button">Erase</button>') +
+        '</div>';
+    }
+    entriesList.innerHTML = html;
+    entriesList.querySelectorAll('[data-erase]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        eraseEntry(btn.getAttribute('data-erase'));
+      });
+    });
+  }
+
+  // ---------- Actions ----------
+  async function saveToken() {
+    var t = tokenInput.value.trim();
+    if (!t) {
+      showFeedback(setupFeedback, 'error', 'Please paste a token.');
+      return;
+    }
+    if (!/^(github_pat_|ghp_|github)/.test(t) && t.length < 20) {
+      showFeedback(setupFeedback, 'error',
+        'That doesn\'t look like a GitHub token. It should start with <code>github_pat_</code> or <code>ghp_</code>.');
+      return;
+    }
+    setBusy(saveTokenBtn, true, 'Checking…');
+    hideFeedback(setupFeedback);
+
+    // Validate by trying to read the file
+    try {
+      await fetchEntries(t);
+    } catch (err) {
+      setBusy(saveTokenBtn, false);
+      showFeedback(setupFeedback, 'error',
+        'Token did not work: <code>' + esc(err.message) + '</code>' +
+        '<br><br>Check that the token has <strong>Contents: Read and write</strong> ' +
+        'on <code>' + esc(OWNER + '/' + REPO) + '</code>.');
+      return;
+    }
+
+    if (!store.set(STORAGE_KEY, t)) {
+      setBusy(saveTokenBtn, false);
+      showFeedback(setupFeedback, 'error',
+        'Could not save the token in this browser (storage may be blocked). ' +
+        'Try disabling private/incognito mode.');
+      return;
+    }
+
+    tokenInput.value = '';
+    setBusy(saveTokenBtn, false);
+    await showWrite();
+  }
+
+  function forgetToken() {
+    if (!confirm('Forget the token on this device? You\'ll need to paste it again next time.')) return;
+    store.del(STORAGE_KEY);
+    showSetup();
+  }
+
+  async function writeEntry() {
+    var raw = content.value;
+    var normalized = normalizeContent(raw);
+    if (!normalized || normalized.length < 3) {
+      showFeedback(writeFeedback, 'error', 'Nothing to write — the entry is empty.');
+      return;
+    }
+
+    var token = getToken();
+    if (!token) { showSetup(); return; }
+
+    hideFeedback(writeFeedback);
+    setBusy(writeBtn, true, 'Writing…');
+
+    try {
+      // Fresh read right before write to get the current SHA
+      var r = await fetchEntries(token);
+      var data = r.data;
+      if (!Array.isArray(data.entries)) data.entries = [];
+
+      var dateStr = todayISO();
+      var newEntry = {
+        id: nextId(data.entries, dateStr),
+        date: nowISO(),
+        content: normalized,
+        erased: false
+      };
+      data.entries.push(newEntry);
+
+      await putEntries(token, data, r.sha, 'diary: ' + newEntry.id);
+
+      content.value = '';
+      showFeedback(writeFeedback, 'success',
+        'Written as entry <code>' + esc(newEntry.id) + '</code>. ' +
+        'Vercel is redeploying the book (~20s). ' +
+        '<a href="/#entry-' + esc(newEntry.id) + '" target="_blank">Open the book</a> ' +
+        'once it\'s ready.');
+
+      await refreshEntries();
+    } catch (err) {
+      showFeedback(writeFeedback, 'error',
+        'Could not write: <code>' + esc(err.message) + '</code>' +
+        '<br><br>If this says 401, your token may have expired. ' +
+        '<button class="btn-link" id="relog" type="button">Re-paste token</button>');
+      var relog = document.getElementById('relog');
+      if (relog) relog.addEventListener('click', function () {
+        store.del(STORAGE_KEY);
+        showSetup();
+      });
+    } finally {
+      setBusy(writeBtn, false);
+    }
+  }
+
+  async function eraseEntry(id) {
+    if (!id) return;
+    if (!confirm('Erase entry ' + id + '?\n\nThe words will be gone forever. A blank page will remain in its place.')) return;
+
+    var token = getToken();
+    if (!token) { showSetup(); return; }
+
+    try {
+      var r = await fetchEntries(token);
+      var data = r.data;
+      var entries = data.entries || [];
+      var target = null;
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].id === id) { target = entries[i]; break; }
+      }
+      if (!target) throw new Error('Entry ' + id + ' not found');
+      if (target.erased) {
+        alert('That entry is already erased.');
+        return;
+      }
+
+      target._pageCount = estimatePageCount(target.content || '');
+      target.content = '';
+      target.erased = true;
+
+      await putEntries(token, data, r.sha, 'erase: ' + id);
+      await refreshEntries();
+    } catch (err) {
+      alert('Could not erase: ' + err.message);
+    }
+  }
+
+  // ---------- Init ----------
+  saveTokenBtn.addEventListener('click', saveToken);
+  tokenInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); saveToken(); }
+  });
+  writeBtn.addEventListener('click', writeEntry);
+  forgetBtn.addEventListener('click', forgetToken);
+  content.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      writeEntry();
+    }
+  });
+
+  var token = getToken();
+  if (token) showWrite();
+  else showSetup();
+})();
+</script>
+</body>
+</html>
