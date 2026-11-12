@@ -102,6 +102,7 @@ body {
   width: 100%;
   max-width: 1000px;
   position: relative;
+  perspective: 2500px; /* Enables 3D space for the page flip */
 }
 
 .book {
@@ -112,18 +113,7 @@ body {
   box-shadow: var(--shadow-book);
   position: relative;
   min-height: 55vh;
-}
-
-.book.flipping-next { animation: riffleNext 0.34s ease-out; }
-.book.flipping-prev { animation: rifflePrev 0.34s ease-out; }
-
-@keyframes riffleNext {
-  from { opacity: 0; transform: translateX(10px) scale(0.998); }
-  to   { opacity: 1; transform: translateX(0)   scale(1); }
-}
-@keyframes rifflePrev {
-  from { opacity: 0; transform: translateX(-10px) scale(0.998); }
-  to   { opacity: 1; transform: translateX(0)    scale(1); }
+  transform-style: preserve-3d;
 }
 
 .book::before {
@@ -344,6 +334,65 @@ body {
 
 .page-erased .entry-body { display: none; }
 
+/* ---------- 3D FLIP ANIMATION ---------- */
+.flip-sheet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.flip-sheet.flip-next {
+  right: 0;
+  transform-origin: left center;
+}
+
+.flip-sheet.flip-prev {
+  left: 0;
+  transform-origin: right center;
+}
+
+.flip-sheet.animating.flip-next {
+  transform: rotateY(-180deg);
+}
+
+.flip-sheet.animating.flip-prev {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent 37px,
+      var(--rule-line) 37px, var(--rule-line) 38px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border-radius: 0 3px 3px 0;
+  /* Shadow that falls on the turning page itself */
+  animation: pageShadow 0.8s ease-in-out infinite alternate;
+}
+
+.flip-sheet.flip-prev .flip-face {
+  border-radius: 3px 0 0 3px;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+@keyframes pageShadow {
+  0% { box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+  50% { box-shadow: inset 0 0 60px rgba(0,0,0,0.15); }
+  100% { box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+}
+
 /* ---------- Controls ---------- */
 .book-controls {
   display: flex;
@@ -493,11 +542,24 @@ body {
   .entry-body { font-size: calc(var(--font-size) - 1px); }
   .page-counter { min-width: 8rem; font-size: 0.95rem; }
   .font-popover { right: 1rem; bottom: 1rem; }
+  
+  /* Mobile fade/slide fallback */
+  .book.flipping-next { animation: riffleNextMobile 0.34s ease-out; }
+  .book.flipping-prev { animation: rifflePrevMobile 0.34s ease-out; }
+  @keyframes riffleNextMobile {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes rifflePrevMobile {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .flip-sheet { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
-  .book.flipping-next, .book.flipping-prev { animation: none; }
+  .flip-sheet { transition: none; }
 }
 </style>
 </head>
@@ -509,7 +571,6 @@ body {
 </header>
 
 <main class="book-frame">
-  <!-- MOVED book-status INSIDE the book, so it can never block the controls -->
   <div class="book" id="book" aria-live="polite">
     <div class="page page-left" id="page-left"></div>
     <div class="page page-right" id="page-right"></div>
@@ -641,6 +702,7 @@ body {
   var entries = [];
   var pages   = [];
   var cursor  = 0;
+  var isFlipping = false;
 
   function showLoading() {
     bookStatus.hidden = false;
@@ -752,18 +814,83 @@ body {
   }
 
   function flip(dir) {
+    if (isFlipping || pages.length === 0) return;
+
+    // Mobile fallback: simple slide
+    if (!isSpread) {
+      book.classList.remove('flipping-next', 'flipping-prev');
+      void book.offsetWidth;
+      if (dir === 'next') cursor += 1;
+      else cursor -= 1;
+      render();
+      book.classList.add(dir === 'next' ? 'flipping-next' : 'flipping-prev');
+      setTimeout(function() { book.classList.remove('flipping-next', 'flipping-prev'); }, 340);
+      return;
+    }
+
+    // Desktop: 3D Page Flip
+    isFlipping = true;
+    var oldCursor = cursor;
+
+    var sheet = document.createElement('div');
+    sheet.className = 'flip-sheet ' + (dir === 'next' ? 'flip-next' : 'flip-prev');
+
+    var front = document.createElement('div');
+    front.className = 'flip-face flip-front';
+    
+    var back = document.createElement('div');
+    back.className = 'flip-face flip-back';
+
+    if (dir === 'next') {
+      // Front is current right page, back is new left page
+      renderPage(front, pages[oldCursor + 1]);
+      renderPage(back, pages[oldCursor + 2]);
+    } else {
+      // Front is current left page, back is new right page
+      renderPage(front, pages[oldCursor]);
+      renderPage(back, pages[oldCursor - 1]);
+    }
+
+    sheet.appendChild(front);
+    sheet.appendChild(back);
+    book.appendChild(sheet);
+
+    // Force a reflow so the browser registers the initial state
+    void sheet.offsetWidth;
+
+    // Add class to trigger CSS animation
+    sheet.classList.add('animating');
+
+    // At 50% of the animation (400ms), swap the underlying pages
+    setTimeout(function() {
+      if (dir === 'next') {
+        cursor = oldCursor + 2;
+      } else {
+        cursor = oldCursor - 2;
+      }
+      render(); // updates pageLeft and pageRight behind the sheet
+    }, 400);
+
+    // At 100% (800ms), remove the ghost sheet
+    setTimeout(function() {
+      sheet.remove();
+      isFlipping = false;
+    }, 800);
+  }
+
+  function next() { if (!nextBtn.disabled) flip('next'); }
+  function prev() { if (!prevBtn.disabled) flip('prev'); }
+  
+  function gotoPage(idx, dir) {
+    if (isFlipping) return;
+    cursor = isSpread ? idx - (idx % 2) : idx;
+    // Jumping via scrubber still uses the slide animation for speed
     book.classList.remove('flipping-next', 'flipping-prev');
     void book.offsetWidth;
     render();
     if (pages.length) book.classList.add(dir === 'next' ? 'flipping-next' : 'flipping-prev');
   }
 
-  function next() { if (!nextBtn.disabled) { cursor += isSpread ? 2 : 1; flip('next'); } }
-  function prev() { if (!prevBtn.disabled) { cursor -= isSpread ? 2 : 1; flip('prev'); } }
-  function gotoPage(idx, dir) {
-    cursor = isSpread ? idx - (idx % 2) : idx;
-    flip(dir || 'next');
-  }
   function randomPage() {
     var valid = [];
     for (var i = 0; i < pages.length; i++) if (!pages[i].blank) valid.push(i);
@@ -863,7 +990,6 @@ body {
     });
   }
 
-  // FIXED: Restored the scrubber listener
   prevBtn.addEventListener('click', prev);
   nextBtn.addEventListener('click', next);
   scrubber.addEventListener('input', function () {
@@ -899,11 +1025,6 @@ body {
   });
 
   mqSpread.addEventListener('change', function (ev) { isSpread = ev.matches; render(); });
-  book.addEventListener('animationend', function (ev) {
-    if (ev.target && ev.target.classList && ev.target.classList.contains('page')) {
-      book.classList.remove('flipping-next', 'flipping-prev');
-    }
-  });
 
   function jumpToHash() {
     var hash = window.location.hash;
