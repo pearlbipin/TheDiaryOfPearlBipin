@@ -8,6 +8,7 @@
 <meta name="author" content="Pearl Bipin Pulickal">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="canonical" href="https://thediaryofpearlbipin.vercel.app/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 
 <meta property="og:type" content="book">
 <meta property="og:title" content="The Diary Of Pearl Bipin">
@@ -176,7 +177,7 @@ body {
   border-radius: 3px;
   line-height: 1.5;
 }
-.book-status[hidden] { display: none; }
+.book-status[hidden] { display: none !important; }
 .book-status.error {
   background: rgba(80, 20, 25, 0.92);
   align-items: flex-start;
@@ -528,6 +529,7 @@ body {
     <button class="tool-btn" id="random-btn" type="button" title="Random page (r)">&#9860;</button>
     <button class="tool-btn" id="search-btn" type="button" title="Search (Ctrl+K or /)">&#9906;</button>
     <button class="tool-btn" id="font-btn" type="button" title="Text settings">Aa</button>
+    <button class="tool-btn" id="write-btn" type="button" title="Write in diary" onclick="window.location.href='/write.html'">&#9998;</button>
   </div>
 </main>
 
@@ -553,13 +555,11 @@ body {
 (function () {
   'use strict';
 
-  /* Safe storage — never throws, even when localStorage is blocked */
   var storage = {
     get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
     set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
   };
 
-  /* ---------- Utilities ---------- */
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
@@ -571,7 +571,6 @@ body {
       { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
-  /* ---------- Pagination ---------- */
   function splitIntoParagraphs(text) {
     var raw = String(text).split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean);
     var out = [];
@@ -626,7 +625,6 @@ body {
     return pages;
   }
 
-  /* ---------- Refs ---------- */
   var book      = document.getElementById('book');
   var bookStatus = document.getElementById('book-status');
   var pageLeft  = document.getElementById('page-left');
@@ -643,17 +641,19 @@ body {
   var pages   = [];
   var cursor  = 0;
 
-  /* ---------- Status overlay ---------- */
   function showLoading() {
     bookStatus.hidden = false;
+    bookStatus.style.display = 'flex';
     bookStatus.className = 'book-status';
     bookStatus.textContent = 'opening the book…';
   }
   function hideStatus() {
     bookStatus.hidden = true;
+    bookStatus.style.display = 'none';
   }
   function showError(title, detail, hint) {
     bookStatus.hidden = false;
+    bookStatus.style.display = 'flex';
     bookStatus.className = 'book-status error';
     bookStatus.innerHTML =
       '<div class="error-inner">' +
@@ -663,7 +663,6 @@ body {
       '</div>';
   }
 
-  /* ---------- Render ---------- */
   function renderPage(el, page) {
     el.classList.remove('page-empty', 'page-erased');
 
@@ -771,7 +770,6 @@ body {
     gotoPage(valid[Math.floor(Math.random() * valid.length)], 'next');
   }
 
-  /* ---------- Fonts ---------- */
   var fontBtn = document.getElementById('font-btn');
   var fontPopover = document.getElementById('font-popover');
   var root = document.documentElement;
@@ -812,7 +810,6 @@ body {
     }
   });
 
-  /* ---------- Search ---------- */
   var searchBtn = document.getElementById('search-btn');
   var searchOverlay = document.getElementById('search-overlay');
   var searchInput = document.getElementById('search-input');
@@ -865,7 +862,6 @@ body {
     });
   }
 
-  /* ---------- Keyboard ---------- */
   document.addEventListener('keydown', function (ev) {
     var t = ev.target;
     if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
@@ -893,7 +889,6 @@ body {
     }
   });
 
-  /* ---------- Responsive ---------- */
   mqSpread.addEventListener('change', function (ev) { isSpread = ev.matches; render(); });
   book.addEventListener('animationend', function (ev) {
     if (ev.target && ev.target.classList && ev.target.classList.contains('page')) {
@@ -901,7 +896,6 @@ body {
     }
   });
 
-  /* ---------- Hash deep-link ---------- */
   function jumpToHash() {
     var hash = window.location.hash;
     if (!hash || hash.indexOf('#entry-') !== 0) return;
@@ -914,7 +908,6 @@ body {
   }
   window.addEventListener('hashchange', jumpToHash);
 
-  /* ---------- JSON-LD ---------- */
   function injectJsonLd() {
     var items = [];
     for (var i = 0; i < entries.length; i++) {
@@ -943,7 +936,6 @@ body {
     document.head.appendChild(s);
   }
 
-  /* ---------- Boot ---------- */
   function boot(data) {
     entries = (data.entries || []).slice().sort(function (a, b) {
       var da = new Date(a.date).getTime();
@@ -986,7 +978,6 @@ body {
     }
   }
 
-  /* ---------- Start ---------- */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', load);
   } else {
