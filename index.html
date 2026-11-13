@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>The Diary Of Pearl Bipin</title>
+<title>The Diary Of Pearl Bipin Pulickal</title>
 <meta name="description" content="The personal diary of Pearl Bipin Pulickal. An open book you can read, page by page.">
 <meta name="author" content="Pearl Bipin Pulickal">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -11,7 +11,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 
 <meta property="og:type" content="book">
-<meta property="og:title" content="The Diary Of Pearl Bipin">
+<meta property="og:title" content="The Diary Of Pearl Bipin Pulickal">
 <meta property="og:description" content="An open book you can read, page by page.">
 <meta property="og:url" content="https://thediaryofpearlbipin.vercel.app/">
 
@@ -86,7 +86,8 @@ body {
 .masthead h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 2.8rem;
+  /* Adjusted size to fit the longer name gracefully */
+  font-size: clamp(2rem, 4vw, 2.8rem); 
   line-height: 1;
   margin: 0 0 0.2rem;
   color: var(--paper);
@@ -420,72 +421,110 @@ footer {
   font-family: var(--font-hand);
 }
 
+/* UI OVERHAUL: Heavier, Punchier Arrows */
 .icon-btn {
-  background: transparent;
-  border: 1px solid rgba(247, 239, 217, 0.35);
+  background: rgba(255, 255, 255, 0.1); /* Slight glass/wood reflection */
+  border: 2px solid var(--paper); /* Thicker, solid border */
   color: var(--paper);
-  width: 2.5rem; height: 2.5rem;
+  width: 2.8rem; 
+  height: 2.8rem;
   border-radius: 50%;
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
   font-family: var(--font-hand);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Pops off the table */
 }
 .icon-btn:hover:not(:disabled) {
-  background: var(--paper); color: var(--ui-ink); border-color: var(--paper);
-  transform: translateY(-1px);
+  background: var(--paper); 
+  color: var(--ui-ink); 
+  border-color: var(--paper);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.6);
 }
-.icon-btn:disabled { opacity: 0.22; cursor: default; }
+.icon-btn:disabled { 
+  opacity: 0.4; 
+  cursor: default; 
+  border-color: rgba(247, 239, 217, 0.4);
+}
 
+/* UI OVERHAUL: Heavier Page Counter */
 .page-counter {
   font-family: var(--font-hand);
-  font-size: 1.05rem;
-  color: rgba(247, 239, 217, 0.75);
-  min-width: 12rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--paper);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* Readability on wood */
+  min-width: 14rem;
   text-align: center;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
 }
 
+/* UI OVERHAUL: Thicker Slider */
 .scrubber-wrap {
   width: 100%;
   max-width: 540px;
   padding: 0 0.5rem;
+  margin-top: 0.3rem;
 }
 .scrubber {
   -webkit-appearance: none; appearance: none;
-  width: 100%; height: 3px;
-  background: rgba(247, 239, 217, 0.20);
-  border-radius: 2px; outline: none; cursor: pointer;
+  width: 100%; 
+  height: 5px; /* Thicker track */
+  background: rgba(247, 239, 217, 0.4); /* More visible track */
+  border-radius: 3px; 
+  outline: none; 
+  cursor: pointer;
 }
 .scrubber::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
-  width: 14px; height: 14px; border-radius: 50%;
-  background: var(--paper); border: 2px solid var(--ui-ink);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.5); cursor: pointer;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--paper); 
+  border: 3px solid var(--ui-ink); /* Strong border */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6); 
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.scrubber::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
 }
 .scrubber::-moz-range-thumb {
-  width: 12px; height: 12px; border-radius: 50%;
-  background: var(--paper); border: 2px solid var(--ui-ink); cursor: pointer;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--paper); 
+  border: 3px solid var(--ui-ink); 
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6); 
 }
 
+/* UI OVERHAUL: Heavier, Engraved Tool Icons */
 .book-tools {
   display: flex; justify-content: center; gap: 0.7rem;
+  margin-top: 0.5rem;
 }
 .tool-btn {
-  background: transparent; border: none;
-  color: rgba(247, 239, 217, 0.55);
-  font-family: var(--font-hand); font-size: 1.15rem;
-  padding: 0.2rem 0.6rem; cursor: pointer;
-  border-radius: 3px;
-  transition: color 0.15s, background 0.15s;
+  background: transparent; 
+  border: none;
+  color: var(--paper);
+  font-family: var(--font-hand); 
+  font-size: 1.4rem; /* Bigger */
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* Pop */
+  padding: 0.4rem 0.8rem; 
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s, transform 0.1s;
   line-height: 1;
 }
-.tool-btn:hover { color: var(--paper); background: rgba(247, 239, 217, 0.08); }
+.tool-btn:hover { 
+  color: var(--paper); 
+  background: rgba(247, 239, 217, 0.15); 
+  transform: translateY(-1px);
+}
 
 /* Search Overlay */
 .search-overlay {
@@ -547,7 +586,7 @@ footer {
 /* Mobile */
 @media (max-width: 800px) {
   .masthead { padding-top: 1rem; }
-  .masthead h1 { font-size: 2.15rem; }
+  .masthead h1 { font-size: 1.8rem; } /* Slightly smaller to fit long name */
   .book { grid-template-columns: 1fr; }
   .book::before, .book::after { display: none; }
   .page-left { border-right: none; }
@@ -555,7 +594,11 @@ footer {
   .page { padding: 1.5rem 1.6rem 2.5rem; }
   .page-left::before, .page-right::before { display: none; }
   .entry-body { font-size: calc(var(--font-size) - 1px); }
-  .page-counter { min-width: 8rem; font-size: 0.95rem; }
+  
+  /* Mobile UI adjustments */
+  .page-counter { min-width: 10rem; font-size: 1.2rem; }
+  .icon-btn { width: 2.5rem; height: 2.5rem; font-size: 1.2rem; }
+  .tool-btn { font-size: 1.3rem; padding: 0.4rem 0.6rem; }
   .font-popover { right: 1rem; bottom: 4rem; }
   
   /* Mobile fade/slide fallback */
@@ -581,7 +624,7 @@ footer {
 <body>
 
 <header class="masthead">
-  <h1>The Diary Of Pearl Bipin</h1>
+  <h1>The Diary Of Pearl Bipin Pulickal</h1>
   <div class="ornament" aria-hidden="true">· · ·</div>
 </header>
 
@@ -1087,7 +1130,7 @@ footer {
     s.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'ItemList',
-      name: 'The Diary Of Pearl Bipin — entries',
+      name: 'The Diary Of Pearl Bipin Pulickal — entries',
       itemListElement: items
     });
     document.head.appendChild(s);
