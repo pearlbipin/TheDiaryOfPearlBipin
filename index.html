@@ -819,6 +819,14 @@ footer {
     scrubber.value = pages.length ? cursor + 1 : 1;
     scrubber.disabled = pages.length <= 1;
     storage.set('diary:page', String(cursor));
+
+    // Update URL hash dynamically for sharing
+    if (typeof history !== 'undefined' && history.replaceState) {
+      var newHash = '#page-' + (cursor + 1);
+      if (window.location.hash !== newHash) {
+        history.replaceState(null, null, newHash);
+      }
+    }
   }
 
   function flip(dir) {
@@ -1029,11 +1037,23 @@ footer {
 
   function jumpToHash() {
     var hash = window.location.hash;
-    if (!hash || hash.indexOf('#entry-') !== 0) return;
-    var id = hash.slice('#entry-'.length);
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i].entry && String(pages[i].entry.id) === id && pages[i].isStart) {
-        gotoPage(i, 'next'); return;
+    if (!hash) return;
+    
+    // 1. Support #entry-ID
+    if (hash.indexOf('#entry-') === 0) {
+      var id = hash.slice('#entry-'.length);
+      for (var i = 0; i < pages.length; i++) {
+        if (pages[i].entry && String(pages[i].entry.id) === id && pages[i].isStart) {
+          gotoPage(i, 'next'); return;
+        }
+      }
+    }
+    
+    // 2. Support #page-N
+    if (hash.indexOf('#page-') === 0) {
+      var pageNum = parseInt(hash.slice('#page-'.length), 10);
+      if (!isNaN(pageNum) && pageNum > 0 && pageNum <= pages.length) {
+        gotoPage(pageNum - 1, 'next'); return;
       }
     }
   }
@@ -1106,6 +1126,38 @@ footer {
         'or open the live site at <code>thediaryofpearlbipin.vercel.app</code> ' +
         'once it\'s deployed.'
       );
+    }
+  }
+
+  // --- SWIPE NAVIGATION LOGIC ---
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var touchEndX = 0;
+  var touchEndY = 0;
+
+  book.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  book.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    var diffX = touchEndX - touchStartX;
+    var diffY = touchEndY - touchStartY;
+    
+    // Only register horizontal swipes (diffX greater than diffY) 
+    // and the swipe must be at least 50px long
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        prev(); // Swiped right
+      } else {
+        next(); // Swiped left
+      }
     }
   }
 
