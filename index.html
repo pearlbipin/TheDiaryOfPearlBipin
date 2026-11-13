@@ -17,7 +17,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,700;1,400&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -86,7 +86,6 @@ body {
 .masthead h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  /* Adjusted size to fit the longer name gracefully */
   font-size: clamp(2rem, 4vw, 2.8rem); 
   line-height: 1;
   margin: 0 0 0.2rem;
@@ -406,77 +405,87 @@ main {
 /* Footer Controls Area */
 footer {
   flex-shrink: 0;
-  padding-bottom: 1rem;
+  padding-top: 2rem; /* SHIFTS THE CONTROLS DOWN */
+  padding-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.8rem;
 }
 
 .book-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.4rem;
+  gap: 2.5rem; /* Spreads the arrows and text out slightly */
   font-family: var(--font-hand);
 }
 
-/* UI OVERHAUL: Heavier, Punchier Arrows */
+/* UI OVERHAUL: Elevator-style Arrow Buttons */
 .icon-btn {
-  background: rgba(255, 255, 255, 0.1); /* Slight glass/wood reflection */
-  border: 2px solid var(--paper); /* Thicker, solid border */
+  background: rgba(0, 0, 0, 0.25); /* Darker base */
+  border: 2px solid rgba(247, 239, 217, 0.6); /* Solid, visible border */
   color: var(--paper);
-  width: 2.8rem; 
-  height: 2.8rem;
+  width: 3.2rem; /* Bigger */
+  height: 3.2rem;
   border-radius: 50%;
-  font-size: 1.4rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
-  font-family: var(--font-hand);
-  font-weight: 700;
-  line-height: 1;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Pops off the table */
+  transition: all 0.15s ease;
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.6), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.15), /* Inner top highlight */
+    inset 0 -3px 6px rgba(0, 0, 0, 0.4);       /* Inner bottom shadow */
 }
 .icon-btn:hover:not(:disabled) {
   background: var(--paper); 
   color: var(--ui-ink); 
   border-color: var(--paper);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
 }
 .icon-btn:disabled { 
-  opacity: 0.4; 
+  opacity: 0.3; 
   cursor: default; 
-  border-color: rgba(247, 239, 217, 0.4);
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(247, 239, 217, 0.3);
+  box-shadow: none;
+}
+.icon-btn svg {
+  width: 26px;
+  height: 26px;
+  stroke-width: 2.5; /* Thick arrows */
 }
 
-/* UI OVERHAUL: Heavier Page Counter */
+/* UI OVERHAUL: Serious, Bold Serif Counter */
 .page-counter {
-  font-family: var(--font-hand);
-  font-size: 1.35rem;
+  font-family: var(--font-serif); /* Serious font */
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--paper);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* Readability on wood */
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9); /* Strong shadow for readability */
   min-width: 14rem;
   text-align: center;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* UI OVERHAUL: Thicker Slider */
+/* Thicker Slider */
 .scrubber-wrap {
   width: 100%;
   max-width: 540px;
   padding: 0 0.5rem;
-  margin-top: 0.3rem;
+  margin-top: 0.2rem;
 }
 .scrubber {
   -webkit-appearance: none; appearance: none;
   width: 100%; 
-  height: 5px; /* Thicker track */
-  background: rgba(247, 239, 217, 0.4); /* More visible track */
+  height: 5px;
+  background: rgba(247, 239, 217, 0.4);
   border-radius: 3px; 
   outline: none; 
   cursor: pointer;
@@ -485,7 +494,7 @@ footer {
   -webkit-appearance: none; appearance: none;
   width: 18px; height: 18px; border-radius: 50%;
   background: var(--paper); 
-  border: 3px solid var(--ui-ink); /* Strong border */
+  border: 3px solid var(--ui-ink);
   box-shadow: 0 2px 6px rgba(0,0,0,0.6); 
   cursor: pointer;
   transition: transform 0.1s;
@@ -501,7 +510,7 @@ footer {
   box-shadow: 0 2px 6px rgba(0,0,0,0.6); 
 }
 
-/* UI OVERHAUL: Heavier, Engraved Tool Icons */
+/* Tool Icons (Unchanged as requested) */
 .book-tools {
   display: flex; justify-content: center; gap: 0.7rem;
   margin-top: 0.5rem;
@@ -511,9 +520,9 @@ footer {
   border: none;
   color: var(--paper);
   font-family: var(--font-hand); 
-  font-size: 1.4rem; /* Bigger */
+  font-size: 1.4rem;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* Pop */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   padding: 0.4rem 0.8rem; 
   cursor: pointer;
   border-radius: 4px;
@@ -586,7 +595,7 @@ footer {
 /* Mobile */
 @media (max-width: 800px) {
   .masthead { padding-top: 1rem; }
-  .masthead h1 { font-size: 1.8rem; } /* Slightly smaller to fit long name */
+  .masthead h1 { font-size: 1.8rem; }
   .book { grid-template-columns: 1fr; }
   .book::before, .book::after { display: none; }
   .page-left { border-right: none; }
@@ -596,8 +605,11 @@ footer {
   .entry-body { font-size: calc(var(--font-size) - 1px); }
   
   /* Mobile UI adjustments */
-  .page-counter { min-width: 10rem; font-size: 1.2rem; }
-  .icon-btn { width: 2.5rem; height: 2.5rem; font-size: 1.2rem; }
+  footer { padding-top: 1rem; } /* Less padding on mobile to save space */
+  .book-controls { gap: 1rem; }
+  .page-counter { min-width: 10rem; font-size: 1.1rem; }
+  .icon-btn { width: 2.8rem; height: 2.8rem; }
+  .icon-btn svg { width: 22px; height: 22px; }
   .tool-btn { font-size: 1.3rem; padding: 0.4rem 0.6rem; }
   .font-popover { right: 1rem; bottom: 4rem; }
   
@@ -640,9 +652,20 @@ footer {
 
 <footer>
   <nav class="book-controls" aria-label="Page navigation">
-    <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">&larr;</button>
+    <!-- Replaced text arrows with thick SVG arrows -->
+    <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </button>
     <span class="page-counter" id="page-counter"></span>
-    <button id="next" class="icon-btn" type="button" aria-label="Next pages">&rarr;</button>
+    <button id="next" class="icon-btn" type="button" aria-label="Next pages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
   </nav>
 
   <div class="scrubber-wrap">
