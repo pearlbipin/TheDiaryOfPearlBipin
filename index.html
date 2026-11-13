@@ -9,7 +9,7 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="canonical" href="https://thediaryofpearlbipin.vercel.app/">
 
-<!-- NEW: Tells AI crawlers where the plain text archive is -->
+<!-- Tells AI crawlers where the plain text archive is -->
 <link rel="alternate" type="text/plain" href="/llms.txt" title="Plain Text Archive">
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
@@ -21,31 +21,33 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,700;1,400&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<!-- Added Kalam as the primary handwriting font -->
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Caveat:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,700;1,400&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --paper:        #f7efd9;
-  --paper-edge:   #e9dcc0;
-  --paper-shadow: #d4c5a5;
+  --paper:        #f4e8d3; /* Slightly darker, warmer aged paper */
+  --paper-edge:   #e3d2b6;
+  --paper-shadow: #c9b697;
   
-  --ink:          #1a3a8a;
-  --ink-soft:     #4d5c9c;
-  --ink-meta:     #7a6b58;
+  --ink:          #152a4a; /* Darker, fountain pen navy */
+  --ink-soft:     #3e5175;
+  --ink-meta:     #6b5c4a;
   --ui-ink:       #3a2f24;
 
-  --ribbon:       #8b1e3f;
-  --margin-line:  rgba(190, 70, 70, 0.16);
-  --rule-line:    rgba(100, 130, 180, 0.055);
+  --ribbon:       #6e1a2e; /* Slightly darker crimson */
+  --margin-line:  rgba(170, 60, 60, 0.25); /* Fainter, aged red margin */
+  --rule-line:    rgba(80, 110, 160, 0.08); /* Slightly darker blue lines */
 
   --font-size:    22px;
-  --font-hand:    'Caveat', 'Kalam', 'Patrick Hand', cursive, sans-serif;
+  --font-hand:    'Kalam', 'Caveat', 'Patrick Hand', cursive, sans-serif; /* Kalam is grittier */
   --font-serif:   'Lora', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-display: 'Dancing Script', 'Caveat', cursive;
 
-  --shadow-book: 0 35px 70px rgba(0, 0, 0, 0.7),
-                 0 10px 20px rgba(0, 0, 0, 0.4),
-                 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* Contact shadow + Ambient shadow for realism */
+  --shadow-book: 0 2px 4px rgba(0, 0, 0, 0.8), 
+                 0 15px 35px rgba(0, 0, 0, 0.6),
+                 0 40px 80px rgba(0, 0, 0, 0.4);
 }
 
 * { box-sizing: border-box; }
@@ -57,20 +59,23 @@ html, body { margin: 0; padding: 0; }
 body {
   height: 100vh;
   height: 100dvh;
-  background-color: #2b1d14; /* Deep wood base */
+  background-color: #1a110b; /* Darker base */
   background-image: 
-    /* 1. Soft overhead spotlight */
-    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
-    /* 2. The dark crevices between horizontal planks (every 140px) */
+    /* 1. Soft overhead spotlight / Vignette */
+    radial-gradient(ellipse at 50% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.7) 100%),
+    /* 2. The dark crevices between horizontal planks */
     repeating-linear-gradient(0deg, 
       transparent 0px, transparent 138px, 
-      rgba(0, 0, 0, 0.6) 138px, rgba(0, 0, 0, 0.6) 140px),
-    /* 3. Fine horizontal wood grain lines */
+      rgba(0, 0, 0, 0.8) 138px, rgba(0, 0, 0, 0.8) 142px),
+    /* 3. Fine horizontal grain/dust lines */
     repeating-linear-gradient(0deg, 
-      transparent 0px, transparent 4px, 
-      rgba(0, 0, 0, 0.03) 4px, rgba(0, 0, 0, 0.03) 5px),
-    /* 4. The rugged SVG texture overlay (knots and waves) */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='wood'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005 0.15' numOctaves='4' result='noise'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.3  0 0 0 0 0.15  0 0 0 0 0.05  0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23wood)'/%3E%3C/svg%3E");
+      transparent 0px, transparent 3px, 
+      rgba(255, 255, 255, 0.015) 3px, rgba(255, 255, 255, 0.015) 4px),
+    /* 4. Seamless rugged texture overlay (fixed the tiling breaking) */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='wood'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01 0.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.2  0 0 0 0 0.1  0 0 0 0 0.05  0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23wood)'/%3E%3C/svg%3E"),
+    /* 5. Base wood color */
+    linear-gradient(to bottom, #2e1e15, #150d08);
 
   color: var(--ink);
   font-family: var(--font-hand);
@@ -94,14 +99,14 @@ body {
   line-height: 1;
   margin: 0 0 0.2rem;
   color: var(--paper);
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.9);
   letter-spacing: 0.01em;
 }
 .ornament {
   font-family: var(--font-hand);
   font-size: 0.9rem;
   letter-spacing: 0.5em;
-  color: rgba(247, 239, 217, 0.55);
+  color: rgba(247, 239, 217, 0.4);
   user-select: none;
 }
 
@@ -140,29 +145,31 @@ main {
   width: 64px;
   transform: translateX(50%);
   background: linear-gradient(to right,
-    rgba(60, 40, 20, 0) 0%,
-    rgba(60, 40, 20, 0.15) 48%,
-    rgba(60, 40, 20, 0) 100%);
+    rgba(40, 20, 10, 0) 0%,
+    rgba(40, 20, 10, 0.25) 48%,
+    rgba(40, 20, 10, 0) 100%);
   pointer-events: none;
   z-index: 2;
 }
 
+/* The Ribbon with Fabric Texture and Frayed Edge */
 .book::after {
   content: '';
   position: absolute;
   top: -12px;
   left: 52%;
   transform: translateX(-50%);
-  width: 18px;
-  height: 44px;
-  background: var(--ribbon);
-  background-image: linear-gradient(to bottom,
-    rgba(255,255,255,0.15) 0%,
-    rgba(0,0,0,0) 40%,
-    rgba(0,0,0,0.3) 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  width: 20px;
+  height: 46px;
+  background-color: var(--ribbon);
+  /* Fabric weave + shadow gradient */
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 4px),
+    linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.5) 100%);
+  /* Jagged Frayed Edge */
+  clip-path: polygon(0 0, 100% 0, 100% 94%, 85% 100%, 70% 96%, 50% 100%, 30% 95%, 15% 100%, 0 97%);
   z-index: 4;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
 }
 
 /* Loading / error overlay */
@@ -172,7 +179,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(20, 12, 5, 0.82);
+  background: rgba(20, 12, 5, 0.85);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   z-index: 20;
@@ -221,31 +228,54 @@ main {
   flex-direction: column;
   background-color: var(--paper);
   background-image:
+    /* Faint Coffee / Age Stains */
+    radial-gradient(circle at 15% 30%, rgba(139, 90, 43, 0.08) 0%, transparent 25%),
+    radial-gradient(circle at 85% 70%, rgba(139, 90, 43, 0.06) 0%, transparent 30%),
+    radial-gradient(circle at 50% 90%, rgba(139, 90, 43, 0.05) 0%, transparent 20%),
+    /* Ruled Lines */
     repeating-linear-gradient(to bottom,
       transparent 0, transparent 37px,
       var(--rule-line) 37px, var(--rule-line) 38px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Fibrous Paper Grain */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
   background-repeat: repeat;
   height: 100%;
   overflow: hidden; 
+  /* Aged, darkened edges */
+  box-shadow: inset 0 0 50px rgba(100, 60, 20, 0.15);
 }
 
 .page-left {
   background-image:
-    linear-gradient(to right, rgba(60, 40, 20, 0.05), rgba(60, 40, 20, 0) 26%),
+    /* Spine shadow */
+    linear-gradient(to right, rgba(60, 40, 20, 0.08), rgba(60, 40, 20, 0) 26%),
+    /* Stains */
+    radial-gradient(circle at 15% 30%, rgba(139, 90, 43, 0.08) 0%, transparent 25%),
+    radial-gradient(circle at 85% 70%, rgba(139, 90, 43, 0.06) 0%, transparent 30%),
+    radial-gradient(circle at 50% 90%, rgba(139, 90, 43, 0.05) 0%, transparent 20%),
+    /* Lines */
     repeating-linear-gradient(to bottom,
       transparent 0, transparent 37px,
       var(--rule-line) 37px, var(--rule-line) 38px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Grain */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
   border-right: 1px solid var(--paper-edge);
 }
+
 .page-right {
   background-image:
-    linear-gradient(to left, rgba(60, 40, 20, 0.05), rgba(60, 40, 20, 0) 26%),
+    /* Spine shadow */
+    linear-gradient(to left, rgba(60, 40, 20, 0.08), rgba(60, 40, 20, 0) 26%),
+    /* Stains */
+    radial-gradient(circle at 15% 30%, rgba(139, 90, 43, 0.08) 0%, transparent 25%),
+    radial-gradient(circle at 85% 70%, rgba(139, 90, 43, 0.06) 0%, transparent 30%),
+    radial-gradient(circle at 50% 90%, rgba(139, 90, 43, 0.05) 0%, transparent 20%),
+    /* Lines */
     repeating-linear-gradient(to bottom,
       transparent 0, transparent 37px,
       var(--rule-line) 37px, var(--rule-line) 38px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Grain */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
 }
 
 .page-left::before, .page-right::before {
@@ -269,11 +299,11 @@ main {
 }
 .page-left::after {
   left: 0;
-  background: linear-gradient(45deg, transparent 50%, rgba(140, 125, 100, 0.2) 50%);
+  background: linear-gradient(45deg, transparent 50%, rgba(80, 60, 40, 0.3) 50%);
 }
 .page-right::after {
   right: 0;
-  background: linear-gradient(225deg, transparent 50%, rgba(140, 125, 100, 0.2) 50%);
+  background: linear-gradient(225deg, transparent 50%, rgba(80, 60, 40, 0.3) 50%);
 }
 
 .page-empty {
@@ -293,7 +323,7 @@ main {
 
 .entry-header {
   font-family: var(--font-hand);
-  font-weight: 600;
+  font-weight: 700; /* Kalam looks better bolder for headers */
   font-size: 1.05rem;
   letter-spacing: 0.02em;
   color: var(--ink-soft);
@@ -303,18 +333,19 @@ main {
   flex-shrink: 0;
 }
 .entry-header time { font-style: italic; }
-.entry-header-cont time { opacity: 0.6; font-size: 0.9rem; }
+.entry-header-cont time { opacity: 0.7; font-size: 0.9rem; }
 
 .entry-body {
   font-family: var(--font-hand);
-  font-weight: 500;
+  font-weight: 400; /* 400 is the natural weight for Kalam */
   font-size: var(--font-size);
   line-height: 1.7;
   color: var(--ink);
   flex: 1;
   word-break: break-word;
   overflow-wrap: anywhere;
-  text-shadow: 0 0 0.4px currentColor;
+  /* Ink bleed effect */
+  text-shadow: 0 0 0.8px rgba(21, 42, 74, 0.5);
   overflow-y: auto; 
   scrollbar-width: none; 
 }
@@ -409,7 +440,7 @@ main {
 /* Footer Controls Area */
 footer {
   flex-shrink: 0;
-  padding-top: 2rem; /* SHIFTS THE CONTROLS DOWN */
+  padding-top: 2rem; 
   padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
@@ -421,16 +452,16 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2.5rem; /* Spreads the arrows and text out slightly */
+  gap: 2.5rem; 
   font-family: var(--font-hand);
 }
 
-/* UI OVERHAUL: Elevator-style Arrow Buttons */
+/* Elevator-style Arrow Buttons */
 .icon-btn {
-  background: rgba(0, 0, 0, 0.25); /* Darker base */
-  border: 2px solid rgba(247, 239, 217, 0.6); /* Solid, visible border */
+  background: rgba(0, 0, 0, 0.3); 
+  border: 2px solid rgba(247, 239, 217, 0.5); 
   color: var(--paper);
-  width: 3.2rem; /* Bigger */
+  width: 3.2rem; 
   height: 3.2rem;
   border-radius: 50%;
   cursor: pointer;
@@ -439,37 +470,37 @@ footer {
   justify-content: center;
   transition: all 0.15s ease;
   box-shadow: 
-    0 6px 12px rgba(0, 0, 0, 0.6), 
-    inset 0 2px 4px rgba(255, 255, 255, 0.15), /* Inner top highlight */
-    inset 0 -3px 6px rgba(0, 0, 0, 0.4);       /* Inner bottom shadow */
+    0 6px 12px rgba(0, 0, 0, 0.7), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.1), 
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5); 
 }
 .icon-btn:hover:not(:disabled) {
   background: var(--paper); 
   color: var(--ui-ink); 
   border-color: var(--paper);
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
 }
 .icon-btn:disabled { 
   opacity: 0.3; 
   cursor: default; 
   background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(247, 239, 217, 0.3);
+  border-color: rgba(247, 239, 217, 0.2);
   box-shadow: none;
 }
 .icon-btn svg {
   width: 26px;
   height: 26px;
-  stroke-width: 2.5; /* Thick arrows */
+  stroke-width: 2.5; 
 }
 
-/* UI OVERHAUL: Serious, Bold Serif Counter */
+/* Serious, Bold Serif Counter */
 .page-counter {
-  font-family: var(--font-serif); /* Serious font */
+  font-family: var(--font-serif); 
   font-size: 1.0rem;
   font-weight: 700;
   color: var(--paper);
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9); /* Strong shadow for readability */
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9); 
   min-width: 14rem;
   text-align: center;
   letter-spacing: 0.02em;
@@ -489,7 +520,7 @@ footer {
   -webkit-appearance: none; appearance: none;
   width: 100%; 
   height: 5px;
-  background: rgba(247, 239, 217, 0.4);
+  background: rgba(247, 239, 217, 0.3);
   border-radius: 3px; 
   outline: none; 
   cursor: pointer;
@@ -499,7 +530,7 @@ footer {
   width: 18px; height: 18px; border-radius: 50%;
   background: var(--paper); 
   border: 3px solid var(--ui-ink);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6); 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.7); 
   cursor: pointer;
   transition: transform 0.1s;
 }
@@ -511,10 +542,10 @@ footer {
   background: var(--paper); 
   border: 3px solid var(--ui-ink); 
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6); 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.7); 
 }
 
-/* Tool Icons (Unchanged as requested) */
+/* Tool Icons */
 .book-tools {
   display: flex; justify-content: center; gap: 0.7rem;
   margin-top: 0.5rem;
@@ -526,7 +557,7 @@ footer {
   font-family: var(--font-hand); 
   font-size: 1.4rem;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
   padding: 0.4rem 0.8rem; 
   cursor: pointer;
   border-radius: 4px;
@@ -539,11 +570,11 @@ footer {
   transform: translateY(-1px);
 }
 
-/* NEW: Subtle Plain Text Archive Link */
+/* Subtle Plain Text Archive Link */
 .archive-link {
   font-family: var(--font-serif);
   font-size: 0.75rem;
-  color: rgba(247, 239, 217, 0.4);
+  color: rgba(247, 239, 217, 0.3);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -557,7 +588,7 @@ footer {
 /* Search Overlay */
 .search-overlay {
   position: fixed; inset: 0;
-  background: rgba(20, 12, 5, 0.5);
+  background: rgba(20, 12, 5, 0.6);
   backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
   display: flex; align-items: flex-start; justify-content: center;
   padding-top: 12vh; z-index: 40;
@@ -565,7 +596,7 @@ footer {
 .search-overlay[hidden] { display: none; }
 .search-box {
   background: var(--paper); border-radius: 3px;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
   padding: 1.3rem 1.5rem;
   width: min(540px, 92vw);
   display: flex; flex-direction: column; gap: 0.7rem;
@@ -585,7 +616,7 @@ footer {
 .font-popover {
   position: fixed; bottom: 2.2rem; right: 1.8rem;
   background: var(--paper); border-radius: 4px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
   padding: 1rem 1.1rem;
   font-family: var(--font-hand); font-size: 1rem;
   z-index: 30;
@@ -623,8 +654,7 @@ footer {
   .page-left::before, .page-right::before { display: none; }
   .entry-body { font-size: calc(var(--font-size) - 1px); }
   
-  /* Mobile UI adjustments */
-  footer { padding-top: 1rem; } /* Less padding on mobile to save space */
+  footer { padding-top: 1rem; }
   .book-controls { gap: 1rem; }
   .page-counter { min-width: 10rem; font-size: 1.1rem; }
   .icon-btn { width: 2.8rem; height: 2.8rem; }
@@ -671,7 +701,6 @@ footer {
 
 <footer>
   <nav class="book-controls" aria-label="Page navigation">
-    <!-- Replaced text arrows with thick SVG arrows -->
     <button id="prev" class="icon-btn" type="button" aria-label="Previous pages">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -698,7 +727,6 @@ footer {
     <button class="tool-btn" id="write-btn" type="button" title="Write in diary" onclick="window.location.href='/write.html'">&#9998;</button>
   </div>
 
-  <!-- NEW: The visible link for humans and bots -->
   <a href="/llms.txt" class="archive-link" target="_blank">Plain Text Archive</a>
 </footer>
 
