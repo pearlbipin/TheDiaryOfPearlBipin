@@ -25,11 +25,6 @@
   --paper-edge:   #e9dcc0;
   --paper-shadow: #d4c5a5;
   
-  /* NEW WOOD TABLE COLORS */
-  --desk-dark:    #140d08;
-  --desk-base:    #2c1b12;
-  --desk-light:   #4d3122;
-
   --ink:          #1a3a8a;
   --ink-soft:     #4d5c9c;
   --ink-meta:     #7a6b58;
@@ -44,7 +39,7 @@
   --font-serif:   'Lora', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-display: 'Dancing Script', 'Caveat', cursive;
 
-  --shadow-book: 0 30px 60px rgba(0, 0, 0, 0.6),
+  --shadow-book: 0 35px 70px rgba(0, 0, 0, 0.7),
                  0 10px 20px rgba(0, 0, 0, 0.4),
                  0 2px 6px rgba(0, 0, 0, 0.2);
 }
@@ -54,23 +49,24 @@ html, body { margin: 0; padding: 0; }
 
 @keyframes bodyFadeIn { from { opacity: 0 } to { opacity: 1 } }
 
-/* THE RUGGED WOOD BACKGROUND */
+/* PURE CSS + SVG RUGGED WOOD TABLE */
 body {
   height: 100vh;
   height: 100dvh;
-  background-color: var(--desk-base);
-  /* Multiple layers to create realistic wood grain, spotlight, and texture */
+  background-color: #2b1d14; /* Deep wood base */
   background-image: 
-    /* 1. Overhead soft spotlight */
-    radial-gradient(ellipse at 50% 0%, var(--desk-light) 0%, transparent 70%),
-    /* 2. Fine wood grain (vertical/horizontal mix) */
-    repeating-linear-gradient(90deg, 
-      rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 4px),
+    /* 1. Soft overhead spotlight */
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
+    /* 2. The dark crevices between horizontal planks (every 140px) */
     repeating-linear-gradient(0deg, 
-      rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 2px, transparent 2px, transparent 8px),
-    /* 3. Rugged noise texture */
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-  background-blend-mode: normal, overlay, multiply, normal;
+      transparent 0px, transparent 138px, 
+      rgba(0, 0, 0, 0.6) 138px, rgba(0, 0, 0, 0.6) 140px),
+    /* 3. Fine horizontal wood grain lines */
+    repeating-linear-gradient(0deg, 
+      transparent 0px, transparent 4px, 
+      rgba(0, 0, 0, 0.03) 4px, rgba(0, 0, 0, 0.03) 5px),
+    /* 4. The rugged SVG texture overlay (knots and waves) */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='wood'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005 0.15' numOctaves='4' result='noise'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.3  0 0 0 0 0.15  0 0 0 0 0.05  0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23wood)'/%3E%3C/svg%3E");
 
   color: var(--ink);
   font-family: var(--font-hand);
