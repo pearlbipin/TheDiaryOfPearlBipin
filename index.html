@@ -8,6 +8,10 @@
 <meta name="author" content="Pearl Bipin Pulickal">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="canonical" href="https://thediaryofpearlbipin.vercel.app/">
+
+<!-- NEW: Tells AI crawlers where the plain text archive is -->
+<link rel="alternate" type="text/plain" href="/llms.txt" title="Plain Text Archive">
+
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
 
 <meta property="og:type" content="book">
@@ -406,7 +410,7 @@ main {
 footer {
   flex-shrink: 0;
   padding-top: 2rem; /* SHIFTS THE CONTROLS DOWN */
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -533,6 +537,21 @@ footer {
   color: var(--paper); 
   background: rgba(247, 239, 217, 0.15); 
   transform: translateY(-1px);
+}
+
+/* NEW: Subtle Plain Text Archive Link */
+.archive-link {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  color: rgba(247, 239, 217, 0.4);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 0.4rem;
+  transition: color 0.2s;
+}
+.archive-link:hover {
+  color: var(--paper);
 }
 
 /* Search Overlay */
@@ -678,6 +697,9 @@ footer {
     <button class="tool-btn" id="font-btn" type="button" title="Text settings">Aa</button>
     <button class="tool-btn" id="write-btn" type="button" title="Write in diary" onclick="window.location.href='/write.html'">&#9998;</button>
   </div>
+
+  <!-- NEW: The visible link for humans and bots -->
+  <a href="/llms.txt" class="archive-link" target="_blank">Plain Text Archive</a>
 </footer>
 
 <div class="search-overlay" id="search-overlay" hidden>
